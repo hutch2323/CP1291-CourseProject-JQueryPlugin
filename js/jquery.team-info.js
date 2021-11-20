@@ -19,13 +19,14 @@
             open: null,
             close: null,
             api: `https://statsapi.web.nhl.com/api/v1`,
+            teamID: $("#teamSelector").val(),
         }, options);
 
 
         /**
          * Iterating through each image gallery
          */
-        return this.click(function(){
+        return this.each(function(){
             /**
              * Declaring new element(s) variables
              */
@@ -35,8 +36,10 @@
             //setImageProperties();
             getTeamData();
             getScheduleInfo();
+            console.log("Image Width: " + settings.imageWidth);
 
-
+            $overlay.css({opacity: 0.1}).show().animate({opacity:1});
+            $overlay.css("color", "white");
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
                 //$image.attr("src", imageSource);
@@ -71,11 +74,12 @@
                 console.log(data);
                 console.log("Team ID from plugin - " + settings.teamID);
                 let stats = data.stats[0].splits[0].stat;
-                $("#response").append("Team: " + $("#teamSelector option:selected").text());
-                $("#response").append("</br>Games Played: " + stats.gamesPlayed);
-                $("#response").append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
-                // $overlay.append("</br>Games Played: " + stats.gamesPlayed);
-                // $overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
+                // $("#response").append("Team: " + $("#teamSelector option:selected").text());
+                // $("#response").append("</br>Games Played: " + stats.gamesPlayed);
+                // $("#response").append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
+                $overlay.append("Team: " + $("#teamSelector option:selected").text())
+                $overlay.append("</br>Games Played: " + stats.gamesPlayed);
+                $overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
             }
 
             function getScheduleInfo(){
@@ -126,7 +130,7 @@
                 let gamesToCheck = numberOfGames;
                 let gameIDs = [];
                 let i = counter;
-                $("#response").append("</br></br>" + "Last " + numberOfGames + " Games:");
+                $overlay.append("</br></br>" + "Last " + numberOfGames + " Games:");
                 while (gamesToCheck > 0) {
                     console.log("i - " + i);
                     console.log("Games to check: " + gamesToCheck);
@@ -165,14 +169,15 @@
                             console.log("Record at beginning: " + record.startingRecord.wins + "-" + record.startingRecord.losses + "-" + record.startingRecord.otl);
                         }
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        $("#response").append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
+                        //$("#response").append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
+                        $overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         // gameIDs[gameIDs.length] = schedule[i].games[0]["gamePk"];
                         gamesToCheck--;
                         i--;
                     } else {
                         // if a game is in progress on the current date, we would need to go back one game further to get the final game of the requested amount
                         gameInProgress = true;
-                        console.log("infinite loop");
+                        //console.log("infinite loop");
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score + " (Game in progress)");
                         i--;
                         //gamesToCheck++;
@@ -182,7 +187,8 @@
                 let losses = record.endingRecord.losses - record.startingRecord.losses;
                 let otl = record.endingRecord.otl - record.startingRecord.otl;
                 console.log("Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
-                $("#response").append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
+                $overlay.append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
+                //$("#response").append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
             }
 
             function displayError (error){
@@ -257,6 +263,7 @@
                 }
                 $overlay.animate({opacity:0.1}, function() {
                     $overlay.hide();
+                    $("#proceed").on("click");             
                 })
             });
         });

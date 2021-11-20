@@ -21,6 +21,15 @@
 //         console.log("closed");
 //     }
 // });
-$("#proceed").teamInfoPopup({
-    
-});
+
+$("#proceed").click($("#proceed").off("click"), () =>
+    $(this).teamInfoPopup({
+    imageWidth: "420px"
+    }) 
+);
+
+// $("#proceed").click(function(){
+//     $(this).teamInfoPopup({
+//         imageWidth: "420px"
+//     });
+// });
