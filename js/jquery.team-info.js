@@ -42,6 +42,9 @@
             $overlay.css("color", "white");
             $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; width:100%"></table>`)
             $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4"></th></tr>`);
+            // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
+            // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
+            $overlay.append(`<ul id="scoresList"></ul`)
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
                 //$image.attr("src", imageSource);
@@ -176,9 +179,29 @@
                         }
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         //$("#response").append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        $("#overlayTable").append(`<tr><td colspan="4">${schedule[i]["date"]}</td></tr>`);
-                        $("#overlayTable").append(`<tr><td>${schedule[i].games[0].teams.away.team.name}</td><td>${schedule[i].games[0].teams.away.score}</td><td>${schedule[i].games[0].teams.home.score}</td><td>${schedule[i].games[0].teams.home.team.name}</td></tr>`);
-                        $("#overlayTable").append(`<tr><td colspan="4">--------------------------------------------------</td></tr>`);
+                        //$("#overlayTable").append(`<tr><td colspan="4">${schedule[i]["date"]}</td></tr>`);
+                        //$("#overlayTable").append(`<tr><td>${schedule[i].games[0].teams.away.team.name}</td><td>${schedule[i].games[0].teams.away.score}</td><td>${schedule[i].games[0].teams.home.score}</td><td>${schedule[i].games[0].teams.home.team.name}</td></tr>`);
+                        //$("#overlayTable").append(`<tr><td colspan="4">--------------------------------------------------</td></tr>`);
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+                        let gameDate = new Date(schedule[i]["date"]);
+                        gameDate.setDate(gameDate.getDate() + 1);
+                        let month = months[gameDate.getMonth()];
+                        $("#scoresList").append(
+                        `<div class="scoreContainer">
+                            <div class="scores" id="score${i+1}">
+                                <div class="date">
+                                    ${month}<br>
+                                    ${gameDate.getDate()}
+                                </div>
+                                <div class="teams">
+                                    <div class="team1">${schedule[i].games[0].teams.away.team.name}</div>
+                                    <div class="team2">${schedule[i].games[0].teams.home.team.name}</div>
+                                </div>
+                                <div class="score">
+                                    <div class="score1">${schedule[i].games[0].teams.away.score}</div>
+                                    <div class="score2">${schedule[i].games[0].teams.home.score}</div>
+                            </div>
+                        </div>`)
                         //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         // gameIDs[gameIDs.length] = schedule[i].games[0]["gamePk"];
                         gamesToCheck--;

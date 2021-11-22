@@ -8,7 +8,7 @@ h1 {
     text-align: center;
 }
 
-ul {
+/* ul {
     list-style: none;
     margin: 0 auto;
     max-width: 780px;
@@ -22,14 +22,55 @@ ul li {
     background: #ffffff;
     margin: 5px;
     display: inline-block;
-}
+} */
 
 a {
     text-decoration: none;
 }
 
-ul li img {
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+/* ul li img {
     display: block;
     width: 130px;
     height: 100px
+} */
+
+#scoresList{
+    width: auto;
+    display: inline-block;
+    justify-content: center;
+    margin: 0;
+}
+.scoreContainer{
+    padding:5px;
+    margin: 5px;
+    width: auto;
+    border: 3px solid #fff;
+    display: flex;
+    justify-content: center;
+}
+
+.scores{
+    padding: 20px;
+    display: inline-flex;
+}
+
+.date{
+    float: left;
+    padding-right: 20px;
+    margin: auto;
+    
+}
+
+.teams{
+    float: left;
+    padding-right: 20px;
+}
+
+.score{
+    float: left
 }
