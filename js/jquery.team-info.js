@@ -19,7 +19,7 @@
             open: null,
             close: null,
             api: `https://statsapi.web.nhl.com/api/v1`,
-            teamID: $("#teamSelector").val(),
+            //teamID: $("#teamSelector").val(),
         }, options);
 
 
@@ -40,6 +40,8 @@
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
+            $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; width:100%"></table>`)
+            $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4"></th></tr>`);
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
                 //$image.attr("src", imageSource);
@@ -77,9 +79,13 @@
                 // $("#response").append("Team: " + $("#teamSelector option:selected").text());
                 // $("#response").append("</br>Games Played: " + stats.gamesPlayed);
                 // $("#response").append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
-                $overlay.append("Team: " + $("#teamSelector option:selected").text())
-                $overlay.append("</br>Games Played: " + stats.gamesPlayed);
-                $overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
+                let selectedTeam = $("#teamSelector option:selected").text();
+                //$("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4">${selectedTeam}</th></tr>`);
+                $("#teamName").text(selectedTeam);
+                //$overlay.append("</br>Games Played: " + stats.gamesPlayed);
+                $("#overlayTable").append(`<tr><td colspan=4>Games Played: ${stats.gamesPlayed}</td></tr>`)
+                //$overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
+                $("#overlayTable").append(`<tr><td colspan=4>Record: ${stats.wins}-${stats.losses}-${stats.ot}</td></tr>`)
             }
 
             function getScheduleInfo(){
@@ -170,7 +176,10 @@
                         }
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         //$("#response").append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        $overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
+                        $("#overlayTable").append(`<tr><td colspan="4">${schedule[i]["date"]}</td></tr>`);
+                        $("#overlayTable").append(`<tr><td>${schedule[i].games[0].teams.away.team.name}</td><td>${schedule[i].games[0].teams.away.score}</td><td>${schedule[i].games[0].teams.home.score}</td><td>${schedule[i].games[0].teams.home.team.name}</td></tr>`);
+                        $("#overlayTable").append(`<tr><td colspan="4">--------------------------------------------------</td></tr>`);
+                        //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         // gameIDs[gameIDs.length] = schedule[i].games[0]["gamePk"];
                         gamesToCheck--;
                         i--;
@@ -220,14 +229,15 @@
                 $overlay = $("<div><div>");
                 $overlay.css({
                     "background": settings.overlay,
-                    "position": "absolute",
+                    "position": "relative",
+                    "margin": "auto",
                     "top": "0px",
                     "left": "0px",
                     "display": "none",
                     "text-align": "center",
-                    "width": "100%",
-                    "height": "100%",
-                    "padding-top": "5%"
+                    "width": "50%",
+                    "height": "50%",
+                    "padding": "5%"
                 });
                 $("body").append($overlay);
             }
@@ -258,12 +268,13 @@
             }
 
             $closeButton.click(function() {
+                $("#proceed").attr("disabled", false);
                 if($.isFunction(settings.close)){
                     settings.close.call(this);
                 }
                 $overlay.animate({opacity:0.1}, function() {
-                    $overlay.hide();
-                    $("#proceed").on("click");             
+                    //$overlay.hide();
+                    $overlay.remove();      
                 })
             });
         });

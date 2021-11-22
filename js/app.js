@@ -22,11 +22,13 @@
 //     }
 // });
 
-$("#proceed").click($("#proceed").off("click"), () =>
+$("#proceed").click( () =>  {
+    //$("#proceed").off("click");
+    $("#proceed").attr("disabled", true);
     $(this).teamInfoPopup({
     imageWidth: "420px"
     }) 
-);
+});
 
 // $("#proceed").click(function(){
 //     $(this).teamInfoPopup({
