@@ -1,0 +1,120 @@
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+/* ul li img {
+    display: block;
+    width: 130px;
+    height: 100px
+} */
+
+#scoresList{
+    width: auto;
+    display: inline-block;
+    justify-content: center;
+    margin: 0;
+}
+.scoreContainer{
+    padding:5px;
+    margin: 5px;
+    width: auto;
+    border: 3px solid #fff;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    height: 150px;
+    max-height: 150px;
+    overflow:hidden;
+}
+
+.scores{
+    padding: 20px;
+    display: inline-flex;
+    height: 75%;
+    overflow:hidden;
+}
+
+.date{
+    display:table;
+    float: left;
+    padding-right: 20px;
+    margin: auto;   
+}
+
+.team1, .team2{
+    display: table-cell;
+    margin: auto;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+.teams{
+    float: left;
+    padding-right: 20px;
+    margin: auto;
+    height: 100%;
+    overflow:hidden;
+    /* max-width:150px;
+    max-height:150px; */
+}
+
+.score{
+    float: left;
+    padding-right: 20px;
+    margin: auto;
+}
+
+#endPeriodGame1, #endPeriodGame2, #endPeriodGame3, #endGamePeriod4, #endGamePeriod5{
+    display: none;
+    margin: auto;
+}
+
+img.homeImage, img.awayImage{
+    max-width: 100%;
+    max-height: 100px;
+}
+
+.gameStatus{
+    display: table;
+    margin: auto;
+    width: 100%;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+.gameStatus div{
+    display: flex;
+    width: 100%;
+}
+
+.final{
+    margin: auto;
+}
+
+.scoreTable{
+    table-layout: fixed;
+    height: 100%;
+    max-height:112px;
+    overflow: hidden;
+}
+
+.scoreTable tr{
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+    max-height:112px;
+    overflow: hidden;
+}
+
+.score{
+    vertical-align: middle;
+    font-size: 3em;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    /* height: 100%;
+    margin: auto;
+    justify-content: center; */
+}

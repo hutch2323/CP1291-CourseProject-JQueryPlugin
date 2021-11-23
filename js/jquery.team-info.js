@@ -45,6 +45,7 @@
             // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
             // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
             $overlay.append(`<ul id="scoresList"></ul`)
+            let endPeriod = "";
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
                 //$image.attr("src", imageSource);
@@ -104,6 +105,52 @@
                     .catch(e => displayError(e));
             }
 
+            function getEndOfGamePeriod(date, currentGame){
+                //`https://statsapi.web.nhl.com/api/v1/schedule?teamId=2&startDate=2021-10-30&endDate=2021-10-30&hydrate=team,linescore`
+                let id = $("#teamSelector").val();
+                configuration = `/schedule?teamId=`
+                extension = `&startDate=${date}&endDate=${date}&hydrate=team,linescore`;
+                url = settings.api + configuration + id + extension;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(json => displayEndOfGamePeriod(json.dates[0].games[0].linescore.currentPeriodOrdinal, currentGame))
+                    .catch(e => displayError(e));
+            }
+
+            function displayEndOfGamePeriod(endPeriodOfGame, currentGame){
+                console.log("current game: " + currentGame);
+                console.log("endofGamePeriod: " + endPeriodOfGame);
+                // endPeriod = endPeriodOfGame;
+                // console.log("endPeriod: " + endPeriod);
+
+                if(currentGame == 1){
+                    if (endPeriodOfGame != "3rd"){
+                        $("#endPeriodGame1").css("display", "block");
+                        $("#endPeriodGame1").text(endPeriodOfGame);
+                    }
+                } else if (currentGame == 2){
+                    if (endPeriodOfGame != "3rd"){
+                        $("#endPeriodGame2").css("display", "block");
+                        $("#endPeriodGame2").text(endPeriodOfGame);
+                    }
+                } else if (currentGame == 3){
+                    if (endPeriodOfGame != "3rd"){
+                        $("#endPeriodGame3").css("display", "block");
+                        $("#endPeriodGame3").text(endPeriodOfGame);
+                    }
+                } else if (currentGame == 4){
+                    if (endPeriodOfGame != "3rd")
+                        {$("#endPeriodGame4").css("display", "block");
+                        $("#endPeriodGame4").text(endPeriodOfGame);
+                    }
+                } else if (currentGame == 5){
+                    if (endPeriodOfGame != "3rd"){
+                        $("#endPeriodGame5").css("display", "block");
+                        $("#endPeriodGame5").text(endPeriodOfGame);
+                    }
+                }
+            }
+
             function displayScheduleInfo(data, id){
                 console.log(data);
                 console.log(data.dates);
@@ -139,6 +186,7 @@
                 let gamesToCheck = numberOfGames;
                 let gameIDs = [];
                 let i = counter;
+                let currentGame = 1;
                 $overlay.append("</br></br>" + "Last " + numberOfGames + " Games:");
                 while (gamesToCheck > 0) {
                     console.log("i - " + i);
@@ -186,22 +234,62 @@
                         let gameDate = new Date(schedule[i]["date"]);
                         gameDate.setDate(gameDate.getDate() + 1);
                         let month = months[gameDate.getMonth()];
+
+
+                        let homeImage = schedule[i].games[0].teams.home.team.name;
+                        let awayImage = schedule[i].games[0].teams.away.team.name;
+                        
+                        let length = homeImage.length
+                        for (let i=0; i < length; i++) {
+                            homeImage = homeImage.replace(" ", "_");
+                        }
+                        length = awayImage.length
+                        for (let i=0; i < length; i++) {
+                            awayImage = awayImage.replace(" ", "_");
+                        }
+
+                        // <div class="team1"><img class="awayImage" src="images/${awayImage}.png">${schedule[i].games[0].teams.away.team.name}</div>
+                        //             <div class="team2"><img class="homeImage" src="images/${homeImage}.png">${schedule[i].games[0].teams.home.team.name}</div>
+
                         $("#scoresList").append(
                         `<div class="scoreContainer">
-                            <div class="scores" id="score${i+1}">
+                            <div class="scores" id="score${currentGame}">
                                 <div class="date">
                                     ${month}<br>
                                     ${gameDate.getDate()}
                                 </div>
                                 <div class="teams">
-                                    <div class="team1">${schedule[i].games[0].teams.away.team.name}</div>
-                                    <div class="team2">${schedule[i].games[0].teams.home.team.name}</div>
+                                    <table class="scoreTable">
+                                        <tr>
+                                            <td><img class="awayImage" src="images/${awayImage}.png"></td>
+                                            <td>
+                                                <div class="score">${schedule[i].games[0].teams.away.score}</div>
+                                            </td>
+                                            <td>
+                                                Final
+                                                <div class="gameStatus">
+                                                    <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="score">${schedule[i].games[0].teams.home.score}</div>
+                                            </td>
+                                            <td><img class="homeImage" src="images/${homeImage}.png"></td>
+                                        </tr>
+                                    </table>
                                 </div>
-                                <div class="score">
-                                    <div class="score1">${schedule[i].games[0].teams.away.score}</div>
-                                    <div class="score2">${schedule[i].games[0].teams.home.score}</div>
                             </div>
                         </div>`)
+                                                        // <div class="score">
+                                //     <div class="score1">${schedule[i].games[0].teams.away.score}</div>
+                                //     <div class="score2">${schedule[i].games[0].teams.home.score}</div>
+                                // </div>
+                                // <div class="gameStatus">
+                                //     <div class="final">F</div>
+                                //     <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
+                                // </div>
+                        getEndOfGamePeriod(schedule[i]["date"], currentGame);
+                        currentGame++;
                         //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
                         // gameIDs[gameIDs.length] = schedule[i].games[0]["gamePk"];
                         gamesToCheck--;
@@ -296,7 +384,6 @@
                     settings.close.call(this);
                 }
                 $overlay.animate({opacity:0.1}, function() {
-                    //$overlay.hide();
                     $overlay.remove();      
                 })
             });
