@@ -25,7 +25,7 @@ const pluginInitiation = () => {
 
         for (let i = 0; i < json.teams.length; i++) {
             $("#teamSelector").append("<option value='" + json.teams[i].id + "'>" + json.teams[i].name + "</option>")
-
+            console.log(json.teams[i].id + " - " + json.teams[i].name);
             // preload team images for plugin
             let teamName = json.teams[i].name
             let length = teamName.length
