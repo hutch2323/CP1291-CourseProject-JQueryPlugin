@@ -1,7 +1,7 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
         let settings = $.extend({
-            overlay: 'rgba(0, 0, 0, 0.5)',
+            overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
             closeButton: {
                 src: null,
                 witdh: "30px",
@@ -22,6 +22,39 @@
             //teamID: $("#teamSelector").val(),
         }, options);
 
+        const teamColors = [[24,"#F47A38","#000000"],
+                                [53,"#8C2633", "#5F259F"],
+                                [6, "#000000", "#FFB81C"],
+                                [7, "#002654", "#FCB514"],
+                                [20, "#C8102E", "#F1BE48"],
+                                [12, "#CC0000", "#000000"],
+                                [16, "#CF0A2C", "#000000"],
+                                [21, "#6F263D", "#236192"],
+                                [29, "#002654", "#CE1126"],
+                                [25, "#006847", "#8F8F8C"],
+                                [17, "#CE1126", "#FFFFFF"],
+                                [22, "#041E42", "#FF4C00"],
+                                [13, "#041E42", "#C8102E"],
+                                [26, "#111111", "#A2AAAD"],
+                                [30, "#A6192E", "#154734"],
+                                [8, "#AF1E2D", "#192168"],
+                                [18, "#041E42", "#FFB81C"],
+                                [1, "#CE1126", "#000000"],
+                                [2, "#00539B", "#F47D30"],
+                                [3, "#0038A8", "#CE1126"],
+                                [9, "#C52032", "#000000"],
+                                [4, "#F74902", "#000000"],
+                                [5, "#000000", "#FCB514"],
+                                [28, "#006D75", "#EA7200"],
+                                [55, "#001628", "#99D9D9"],
+                                [19, "#002F87", "#FCB514"],
+                                [14, "#002868", "#000000"],
+                                [10, "#00205B", "#FFFFFF"],
+                                [23, "#00205B", "#041C2C"],
+                                [54, "#B4975A", "#000000"],
+                                [15, "#041E42", "#C8102E"],
+                                [52, "#041E42", "#AC162C"]];
+
 
         /**
          * Iterating through each image gallery
@@ -30,6 +63,7 @@
             /**
              * Declaring new element(s) variables
              */
+
             let $overlay, $closeButton//, $image, $imageCaption;
             setOverlayProperties();
             setCloseButtonProperties();
@@ -40,12 +74,13 @@
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
-            $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; width:100%"></table>`)
+            $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-bottom:8px solid; width:100%"></table>`)
             $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4"></th></tr>`);
             // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
             // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
             $overlay.append(`<ul id="scoresList"></ul`)
             let endPeriod = "";
+
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
                 //$image.attr("src", imageSource);
@@ -61,6 +96,7 @@
 
                 $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             });
+
 
             function getTeamData() {
                 // build URL for API request
@@ -87,9 +123,10 @@
                 //$("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4">${selectedTeam}</th></tr>`);
                 $("#teamName").text(selectedTeam);
                 //$overlay.append("</br>Games Played: " + stats.gamesPlayed);
-                $("#overlayTable").append(`<tr><td colspan=4>Games Played: ${stats.gamesPlayed}</td></tr>`)
+                //$("#overlayTable").append(`<tr><td colspan=4>Games Played: ${stats.gamesPlayed}</td></tr>`)
                 //$overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
                 $("#overlayTable").append(`<tr><td colspan=4>Record: ${stats.wins}-${stats.losses}-${stats.ot}</td></tr>`)
+                getStandingsInfo();
             }
 
             function getScheduleInfo(){
@@ -116,6 +153,41 @@
                     .then(json => displayEndOfGamePeriod(json.dates[0].games[0].linescore.currentPeriodOrdinal, currentGame))
                     .catch(e => displayError(e));
             }
+
+            function getStandingsInfo(){
+                let id = $("#teamSelector").val();
+                configuration = '/standings/'
+                url = settings.api + configuration;
+                fetch(url)
+                .then( response => response.json() )
+                .then( json => displayStandingsInfo(json.records, id) )
+                .catch( e => displayError(e) );
+            }
+
+            function displayStandingsInfo(json, id){
+                let conferenceStanding = null;
+                let divisionalStanding = null;
+                let leagueStanding = null;
+
+                for(let i=0; i < json.length; i++){
+                    for(let j=0; j < json[i].teamRecords.length; j++){
+                        if (id == json[i].teamRecords[j].team.id){
+                            leagueStanding = json[i].teamRecords[j].leagueRank;
+                            conferenceStanding = json[i].teamRecords[j].conferenceRank;
+                            divisionalStanding = json[i].teamRecords[j].divisionRank;
+                            i = json.length;
+                            break;
+                        }
+                    }
+                }
+                
+                // for (let team of teams) {
+                //     if (team.id == id) {
+                //         divisionID = team.division.id;
+                //     }
+                // }
+                $("#overlayTable").append(`<tr><td colspan=4>League Rank: ${leagueStanding} | Conference Rank: ${conferenceStanding} | Division Rank: ${divisionalStanding}</td></tr>`)
+            }    
 
             function displayEndOfGamePeriod(endPeriodOfGame, currentGame){
                 console.log("current game: " + currentGame);
@@ -255,8 +327,7 @@
                         `<div class="scoreContainer">
                             <div class="scores" id="score${currentGame}">
                                 <div class="date">
-                                    ${month}<br>
-                                    ${gameDate.getDate()}
+                                    ${month}. ${gameDate.getDate()}
                                 </div>
                                 <div class="teams">
                                     <table class="scoreTable">
@@ -288,6 +359,23 @@
                                 //     <div class="final">F</div>
                                 //     <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
                                 // </div>
+                        let primaryColor = null;
+                        let secondaryColor = null;
+                        console.log("ID: " + id);
+                        for(let team of teamColors){
+                            console.log(team);
+                            if (team[0] == id){
+                                primaryColor = team[1];
+                                secondaryColor = team[2];
+                            }
+                        }
+                        console.log("Primary Color: " + primaryColor);
+                        console.log("Secondary Color: " + secondaryColor);
+
+                        $(".scoreContainer").css("background", primaryColor);
+                        $(".scoreContainer").css("border-color", secondaryColor);
+                        $("#overlayTable").css("background", primaryColor);
+                        $("#overlayTable").css("border-color", secondaryColor);
                         getEndOfGamePeriod(schedule[i]["date"], currentGame);
                         currentGame++;
                         //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
@@ -348,7 +436,8 @@
                     "text-align": "center",
                     "width": "50%",
                     "height": "50%",
-                    "padding": "5%"
+                    "padding": "5%",
+                    "border-radius": "10px"
                 });
                 $("body").append($overlay);
             }
@@ -364,7 +453,8 @@
                     "top": "5px",
                     "right": "5px",
                     "border": "0px",
-                    "z-index": "1"
+                    "z-index": "1",
+                    "padding": "10px"
                 }
                 
                 if(settings.closeButton.src){
