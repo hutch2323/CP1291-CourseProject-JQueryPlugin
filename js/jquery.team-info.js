@@ -1,27 +1,5 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
-        let settings = $.extend({
-            overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
-            closeButton: {
-                src: null,
-                witdh: "30px",
-                height: "30px"
-            },
-            imageBorder: "5px solid #ffffff",
-            borderRadius: "5px",
-            imageWidth: "500px",
-            imageHeight: "400px",
-            imageCaption: {
-                exist: true,
-                color: "#ffffff",
-                fontSize: "20px"
-            },
-            open: null,
-            close: null,
-            api: `https://statsapi.web.nhl.com/api/v1`,
-            //teamID: $("#teamSelector").val(),
-        }, options);
-
         const teamColors = [[24,"#F47A38","#000000"],
                                 [53,"#8C2633", "#5F259F"],
                                 [6, "#000000", "#FFB81C"],
@@ -55,6 +33,76 @@
                                 [15, "#041E42", "#C8102E"],
                                 [52, "#041E42", "#AC162C"]];
 
+        let settings = $.extend({
+            overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
+            closeButton: {
+                src: null,
+                witdh: "30px",
+                height: "30px"
+            },
+            imageBorder: "5px solid #ffffff",
+            borderRadius: "5px",
+            imageWidth: "500px",
+            imageHeight: "400px",
+            teamName: {
+                fontSize: "25px",
+                fontColor: "#FFFFFF"
+            },
+            record: {
+                fontSize: "16px",
+                fontColor: "#FFFFFF"
+            },
+            rank: {
+                fontSize: "16px",
+                fontColor: "#FFFFFF"
+            },
+            gameResults: {
+                primaryColor: getPrimaryColor(),
+                secondaryColor: getSecondaryColor(),
+            },
+            score: {
+                fontSize: "4em",
+                fontColor: "#FFFFFF"
+            },
+            status: {
+                fontSize: "16px",
+                fontColor: "#FFFFFF"
+            },
+            date: {
+                fontSize: "16px",
+                fontColor: "#FFFFFF"
+            },
+            open: null,
+            close: null,
+            api: `https://statsapi.web.nhl.com/api/v1`,
+            //teamID: $("#teamSelector").val(),
+        }, options);
+
+        function getPrimaryColor() {
+            let primaryColor = null;
+            let id = $("#teamSelector").val()
+            for (let team of teamColors) {
+                if (team[0] == id) {
+                    primaryColor = team[1];
+
+                }
+            }
+            console.log("Primary Color: " + primaryColor);
+
+            return primaryColor
+        }
+
+        function getSecondaryColor() {
+            let secondaryColor = null;
+            let id = $("#teamSelector").val()
+            for (let team of teamColors) {
+                if (team[0] == id) {
+                    secondaryColor = team[2];
+                }
+            }
+            console.log("Secondary Color: " + secondaryColor);
+            return secondaryColor
+        }
 
         /**
          * Iterating through each image gallery
@@ -75,10 +123,10 @@
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
             $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-bottom:8px solid; width:100%"></table>`)
-            $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4"></th></tr>`);
+            $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4" style="color:${settings.teamName.fontColor}; font-size:${settings.teamName.fontSize}"></th></tr>`);
             // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
             // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
-            $overlay.append(`<ul id="scoresList"></ul`)
+            $overlay.append(`<ul id="scoresList"></ul>`)
             let endPeriod = "";
 
             $(this).find("#proceed").on("click", function(event) {
@@ -125,7 +173,7 @@
                 //$overlay.append("</br>Games Played: " + stats.gamesPlayed);
                 //$("#overlayTable").append(`<tr><td colspan=4>Games Played: ${stats.gamesPlayed}</td></tr>`)
                 //$overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
-                $("#overlayTable").append(`<tr><td colspan=4>Record: ${stats.wins}-${stats.losses}-${stats.ot}</td></tr>`)
+                $("#overlayTable").append(`<tr><td colspan=4 style="color:${settings.record.fontColor}; font-size:${settings.record.fontSize}">Record: ${stats.wins}-${stats.losses}-${stats.ot}</td></tr>`)
                 getStandingsInfo();
             }
 
@@ -186,7 +234,7 @@
                 //         divisionID = team.division.id;
                 //     }
                 // }
-                $("#overlayTable").append(`<tr><td colspan=4>League Rank: ${leagueStanding} | Conference Rank: ${conferenceStanding} | Division Rank: ${divisionalStanding}</td></tr>`)
+                $("#overlayTable").append(`<tr><td colspan=4 style="color:${settings.rank.fontColor}; font-size:${settings.rank.fontSize}">League Rank: ${leagueStanding} | Conference Rank: ${conferenceStanding} | Division Rank: ${divisionalStanding}</td></tr>`)
             }    
 
             function displayEndOfGamePeriod(endPeriodOfGame, currentGame){
@@ -259,7 +307,7 @@
                 let gameIDs = [];
                 let i = counter;
                 let currentGame = 1;
-                $overlay.append("</br></br>" + "Last " + numberOfGames + " Games:");
+                //$overlay.append("</br></br>" + "Last " + numberOfGames + " Games:");
                 while (gamesToCheck > 0) {
                     console.log("i - " + i);
                     console.log("Games to check: " + gamesToCheck);
@@ -326,7 +374,7 @@
                         $("#scoresList").append(
                         `<div class="scoreContainer">
                             <div class="scores" id="score${currentGame}">
-                                <div class="date">
+                                <div class="date" style="color:${settings.date.fontColor}; font-size:${settings.date.fontSize}">
                                     ${month}. ${gameDate.getDate()}
                                 </div>
                                 <div class="teams">
@@ -334,16 +382,16 @@
                                         <tr>
                                             <td><img class="awayImage" src="images/${awayImage}.png"></td>
                                             <td>
-                                                <div class="score">${schedule[i].games[0].teams.away.score}</div>
+                                                <div class="score" style="color:${settings.score.fontColor}; font-size:${settings.score.fontSize}">${schedule[i].games[0].teams.away.score}</div>
                                             </td>
-                                            <td>
+                                            <td style="color:${settings.status.fontColor}; font-size:${settings.status.fontSize}">
                                                 Final
                                                 <div class="gameStatus">
-                                                    <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
+                                                    <div id="endPeriodGame${currentGame}"class="endPeriod" style="color:${settings.status.fontColor}; font-size:${settings.status.fontSize}"></div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="score">${schedule[i].games[0].teams.home.score}</div>
+                                                <div class="score" style="color:${settings.score.fontColor}; font-size:${settings.score.fontSize}">${schedule[i].games[0].teams.home.score}</div>
                                             </td>
                                             <td><img class="homeImage" src="images/${homeImage}.png"></td>
                                         </tr>
@@ -359,23 +407,23 @@
                                 //     <div class="final">F</div>
                                 //     <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
                                 // </div>
-                        let primaryColor = null;
-                        let secondaryColor = null;
-                        console.log("ID: " + id);
-                        for(let team of teamColors){
-                            console.log(team);
-                            if (team[0] == id){
-                                primaryColor = team[1];
-                                secondaryColor = team[2];
-                            }
-                        }
-                        console.log("Primary Color: " + primaryColor);
-                        console.log("Secondary Color: " + secondaryColor);
+                        // let primaryColor = null;
+                        // let secondaryColor = null;
+                        // console.log("ID: " + id);
+                        // for(let team of teamColors){
+                        //     console.log(team);
+                        //     if (team[0] == id){
+                        //         primaryColor = team[1];
+                        //         secondaryColor = team[2];
+                        //     }
+                        // }
+                        // console.log("Primary Color: " + primaryColor);
+                        // console.log("Secondary Color: " + secondaryColor);
 
-                        $(".scoreContainer").css("background", primaryColor);
-                        $(".scoreContainer").css("border-color", secondaryColor);
-                        $("#overlayTable").css("background", primaryColor);
-                        $("#overlayTable").css("border-color", secondaryColor);
+                        $(".scoreContainer").css("background", settings.gameResults.primaryColor);
+                        $(".scoreContainer").css("border-color", settings.gameResults.secondaryColor);
+                        $("#overlayTable").css("background", settings.gameResults.primaryColor);
+                        $("#overlayTable").css("border-color", settings.gameResults.secondaryColor);
                         getEndOfGamePeriod(schedule[i]["date"], currentGame);
                         currentGame++;
                         //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
@@ -395,7 +443,7 @@
                 let losses = record.endingRecord.losses - record.startingRecord.losses;
                 let otl = record.endingRecord.otl - record.startingRecord.otl;
                 console.log("Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
-                $overlay.append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
+                $overlay.append("</br><br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
                 //$("#response").append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
             }
 

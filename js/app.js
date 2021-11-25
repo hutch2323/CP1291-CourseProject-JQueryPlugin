@@ -66,6 +66,34 @@ $("#proceed").click( () =>  {
     //$("#proceed").off("click");
     $("#proceed").attr("disabled", true);
     $(this).teamInfoPopup({
-    imageWidth: "420px"
+    // imageWidth: "420px",
+    // score:{
+    //     fontSize: "5em",
+    //     fontColor: "#000000"
+    // },
+    // date: {
+    //     fontSize: "10px",
+    //     fontColor: "#ffffff"
+    // },
+    // status:{
+    //     fontSize: "20px",
+    //     fontColor: "#234513"
+    // },
+    // gameResults: {
+    //     primaryColor: "#8C2633",
+    //     secondaryColor: "#5F259F"
+    // },
+    // teamName:{
+    //     fontSize: "25px",
+    //     fontColor: "#ffffff"
+    // },
+    // record:{
+    //     fontSize: "15px",
+    //     fontColor: "#000000"
+    // },
+    // rank:{
+    //     fontSize: "12px",
+    //     fontColor: "#ffffff"
+    // }
     }) 
 });
