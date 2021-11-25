@@ -66,7 +66,6 @@ $("#proceed").click( () =>  {
     //$("#proceed").off("click");
     $("#proceed").attr("disabled", true);
     $(this).teamInfoPopup({
-    // imageWidth: "420px",
     // score:{
     //     fontSize: "5em",
     //     fontColor: "#000000"
@@ -94,6 +93,10 @@ $("#proceed").click( () =>  {
     // rank:{
     //     fontSize: "12px",
     //     fontColor: "#ffffff"
-    // }
+    // },
+    // recordLast5:{
+    //     fontSize: "16px",
+    //     fontColor: "#FFFFFF"
+    // },
     }) 
 });

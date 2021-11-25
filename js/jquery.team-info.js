@@ -40,10 +40,8 @@
                 witdh: "30px",
                 height: "30px"
             },
-            imageBorder: "5px solid #ffffff",
-            borderRadius: "5px",
-            imageWidth: "500px",
-            imageHeight: "400px",
+            // imageBorder: "5px solid #ffffff",
+            // borderRadius: "5px"
             teamName: {
                 fontSize: "25px",
                 fontColor: "#FFFFFF"
@@ -69,6 +67,10 @@
                 fontColor: "#FFFFFF"
             },
             date: {
+                fontSize: "16px",
+                fontColor: "#FFFFFF"
+            },
+            recordLast5:{
                 fontSize: "16px",
                 fontColor: "#FFFFFF"
             },
@@ -122,11 +124,11 @@
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
-            $overlay.append(`<table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-bottom:8px solid; width:100%"></table>`)
+            $overlay.append(`<ul id="scoresList"></ul>`)
+            $("#scoresList").append(`<div style="margin:5px 5px 20px 5px"><table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-width: 3px 3px 10px 3px; border-style: solid; width:100%"></table></div>`)
             $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4" style="color:${settings.teamName.fontColor}; font-size:${settings.teamName.fontSize}"></th></tr>`);
             // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
             // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
-            $overlay.append(`<ul id="scoresList"></ul>`)
             let endPeriod = "";
 
             $(this).find("#proceed").on("click", function(event) {
@@ -443,7 +445,7 @@
                 let losses = record.endingRecord.losses - record.startingRecord.losses;
                 let otl = record.endingRecord.otl - record.startingRecord.otl;
                 console.log("Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
-                $overlay.append("</br><br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
+                $overlay.append(`<div style="color:${settings.recordLast5.fontColor}; font-size:${settings.recordLast5.fontSize}; padding-top:10px">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
                 //$("#response").append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
             }
 
@@ -476,6 +478,7 @@
                 $overlay = $("<div><div>");
                 $overlay.css({
                     "background": settings.overlay,
+                    "opacity": "0.1",
                     "position": "relative",
                     "margin": "auto",
                     "top": "0px",
