@@ -1,38 +1,5 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
-        const teamColors = [[24,"#F47A38","#000000"],
-                                [53,"#8C2633", "#5F259F"],
-                                [6, "#000000", "#FFB81C"],
-                                [7, "#002654", "#FCB514"],
-                                [20, "#C8102E", "#F1BE48"],
-                                [12, "#CC0000", "#000000"],
-                                [16, "#CF0A2C", "#000000"],
-                                [21, "#6F263D", "#236192"],
-                                [29, "#002654", "#CE1126"],
-                                [25, "#006847", "#8F8F8C"],
-                                [17, "#CE1126", "#FFFFFF"],
-                                [22, "#041E42", "#FF4C00"],
-                                [13, "#041E42", "#C8102E"],
-                                [26, "#111111", "#A2AAAD"],
-                                [30, "#A6192E", "#154734"],
-                                [8, "#AF1E2D", "#192168"],
-                                [18, "#041E42", "#FFB81C"],
-                                [1, "#CE1126", "#000000"],
-                                [2, "#00539B", "#F47D30"],
-                                [3, "#0038A8", "#CE1126"],
-                                [9, "#C52032", "#000000"],
-                                [4, "#F74902", "#000000"],
-                                [5, "#000000", "#FCB514"],
-                                [28, "#006D75", "#EA7200"],
-                                [55, "#001628", "#99D9D9"],
-                                [19, "#002F87", "#FCB514"],
-                                [14, "#002868", "#000000"],
-                                [10, "#00205B", "#FFFFFF"],
-                                [23, "#00205B", "#041C2C"],
-                                [54, "#B4975A", "#000000"],
-                                [15, "#041E42", "#C8102E"],
-                                [52, "#041E42", "#AC162C"]];
-
         let settings = $.extend({
             overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
             closeButton: {
@@ -83,6 +50,7 @@
         function getPrimaryColor() {
             let primaryColor = null;
             let id = $("#teamSelector").val()
+            let teamColors = getColors();
             for (let team of teamColors) {
                 if (team[0] == id) {
                     primaryColor = team[1];
@@ -96,7 +64,8 @@
 
         function getSecondaryColor() {
             let secondaryColor = null;
-            let id = $("#teamSelector").val()
+            let id = $("#teamSelector").val();
+            let teamColors = getColors();
             for (let team of teamColors) {
                 if (team[0] == id) {
                     secondaryColor = team[2];
@@ -104,6 +73,41 @@
             }
             console.log("Secondary Color: " + secondaryColor);
             return secondaryColor
+        }
+
+        function getColors(){
+            return [[24,"#F47A38","#000000"],
+            [53,"#8C2633", "#5F259F"],
+            [6, "#000000", "#FFB81C"],
+            [7, "#002654", "#FCB514"],
+            [20, "#C8102E", "#F1BE48"],
+            [12, "#CC0000", "#000000"],
+            [16, "#CF0A2C", "#000000"],
+            [21, "#6F263D", "#236192"],
+            [29, "#002654", "#CE1126"],
+            [25, "#006847", "#8F8F8C"],
+            [17, "#CE1126", "#FFFFFF"],
+            [22, "#041E42", "#FF4C00"],
+            [13, "#041E42", "#C8102E"],
+            [26, "#111111", "#A2AAAD"],
+            [30, "#A6192E", "#154734"],
+            [8, "#AF1E2D", "#192168"],
+            [18, "#041E42", "#FFB81C"],
+            [1, "#CE1126", "#000000"],
+            [2, "#00539B", "#F47D30"],
+            [3, "#0038A8", "#CE1126"],
+            [9, "#C52032", "#000000"],
+            [4, "#F74902", "#000000"],
+            [5, "#000000", "#FCB514"],
+            [28, "#006D75", "#EA7200"],
+            [55, "#001628", "#99D9D9"],
+            [19, "#002F87", "#FCB514"],
+            [14, "#002868", "#000000"],
+            [10, "#00205B", "#FFFFFF"],
+            [23, "#00205B", "#041C2C"],
+            [54, "#B4975A", "#000000"],
+            [15, "#041E42", "#C8102E"],
+            [52, "#041E42", "#AC162C"]];
         }
 
         /**
@@ -120,7 +124,7 @@
             //setImageProperties();
             getTeamData();
             getScheduleInfo();
-            console.log("Image Width: " + settings.imageWidth);
+            //console.log("Image Width: " + settings.imageWidth);
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
@@ -129,7 +133,7 @@
             $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4" style="color:${settings.teamName.fontColor}; font-size:${settings.teamName.fontSize}"></th></tr>`);
             // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
             // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
-            let endPeriod = "";
+            //let endPeriod = "";
 
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
