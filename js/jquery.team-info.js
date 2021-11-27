@@ -1,6 +1,7 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
         let settings = $.extend({
+            // overlay custom options
             overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
             width: "50%",
             borderRadius: "10px",
