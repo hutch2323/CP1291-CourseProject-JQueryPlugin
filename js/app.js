@@ -66,6 +66,7 @@ $("#proceed").click( () =>  {
     //$("#proceed").off("click");
     $("#proceed").attr("disabled", true);
     $(this).teamInfoPopup({
+        margin: "0px"
     // score:{
     //     fontSize: "5em",
     //     fontColor: "#000000"
