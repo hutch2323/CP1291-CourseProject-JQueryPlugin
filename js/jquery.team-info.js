@@ -2,6 +2,10 @@
     $.fn.teamInfoPopup = function(options){
         let settings = $.extend({
             overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
+            width: "50%",
+            borderRadius: "10px",
+            padding: "5%",
+            margin: "auto",
             closeButton: {
                 src: null,
                 witdh: "30px",
@@ -43,7 +47,7 @@
             },
             open: null,
             close: null,
-            api: `https://statsapi.web.nhl.com/api/v1`,
+            // api: `https://statsapi.web.nhl.com/api/v1`,
             //teamID: $("#teamSelector").val(),
         }, options);
 
@@ -76,73 +80,60 @@
         }
 
         function getColors(){
-            return [[24,"#F47A38","#000000"],
-            [53,"#8C2633", "#5F259F"],
-            [6, "#000000", "#FFB81C"],
-            [7, "#002654", "#FCB514"],
-            [20, "#C8102E", "#F1BE48"],
-            [12, "#CC0000", "#000000"],
-            [16, "#CF0A2C", "#000000"],
-            [21, "#6F263D", "#236192"],
-            [29, "#002654", "#CE1126"],
-            [25, "#006847", "#8F8F8C"],
-            [17, "#CE1126", "#FFFFFF"],
-            [22, "#041E42", "#FF4C00"],
-            [13, "#041E42", "#C8102E"],
-            [26, "#111111", "#A2AAAD"],
-            [30, "#A6192E", "#154734"],
-            [8, "#AF1E2D", "#192168"],
-            [18, "#041E42", "#FFB81C"],
-            [1, "#CE1126", "#000000"],
-            [2, "#00539B", "#F47D30"],
-            [3, "#0038A8", "#CE1126"],
-            [9, "#C52032", "#000000"],
-            [4, "#F74902", "#000000"],
-            [5, "#000000", "#FCB514"],
-            [28, "#006D75", "#EA7200"],
-            [55, "#001628", "#99D9D9"],
-            [19, "#002F87", "#FCB514"],
-            [14, "#002868", "#000000"],
-            [10, "#00205B", "#FFFFFF"],
-            [23, "#00205B", "#041C2C"],
-            [54, "#B4975A", "#000000"],
-            [15, "#041E42", "#C8102E"],
-            [52, "#041E42", "#AC162C"]];
+            return [[24,"#F47A38","#000000"], // Anaheim Ducks
+            [53,"#8C2633", "#5F259F"], // Arizona Coyotes
+            [6, "#000000", "#FFB81C"], // Boston Bruins
+            [7, "#002654", "#FCB514"], // Buffalo Sabres
+            [20, "#C8102E", "#F1BE48"], // Calgary Flames
+            [12, "#CC0000", "#000000"], // Carolina Hurrincanes
+            [16, "#CF0A2C", "#000000"], // Chicago Blackhawks
+            [21, "#6F263D", "#236192"], // Colorado Avalanche
+            [29, "#002654", "#CE1126"], // Columbus Blue Jackets
+            [25, "#006847", "#8F8F8C"], // Dallas Stars
+            [17, "#CE1126", "#FFFFFF"], // Detroit Red Wings
+            [22, "#041E42", "#FF4C00"], // Edmonton Oilers
+            [13, "#041E42", "#C8102E"], // Florida Panthers
+            [26, "#111111", "#A2AAAD"], // LA Kings
+            [30, "#A6192E", "#154734"], // Minnesota Wild
+            [8, "#AF1E2D", "#192168"], // Montreal Canadiens
+            [18, "#041E42", "#FFB81C"], // Nashville Predators
+            [1, "#CE1126", "#000000"], // New Jersey Devils
+            [2, "#00539B", "#F47D30"], // New York Islanders
+            [3, "#0038A8", "#CE1126"], // New York Rangers
+            [9, "#C52032", "#000000"], // Ottawa Senators
+            [4, "#F74902", "#000000"], // Philadelphia Flyers
+            [5, "#000000", "#FCB514"], // Pittsburgh Penguins
+            [28, "#006D75", "#EA7200"], // San Jose Sharks
+            [55, "#001628", "#99D9D9"], // Seattle Kraken
+            [19, "#002F87", "#FCB514"], // St. Louis Blues
+            [14, "#002868", "#000000"], // Tampa Bay Lightning
+            [10, "#00205B", "#FFFFFF"], // Toronto Maple Leafs
+            [23, "#00205B", "#041C2C"], // Vancouver Canucks
+            [54, "#B4975A", "#000000"], // Vegas Golden Knights
+            [15, "#041E42", "#C8102E"], // Washington Capitals
+            [52, "#041E42", "#AC162C"]]; // Winnipeg Jets
         }
 
-        /**
-         * Iterating through each image gallery
-         */
         return this.each(function(){
             /**
              * Declaring new element(s) variables
              */
-
-            let $overlay, $closeButton//, $image, $imageCaption;
+            const api = `https://statsapi.web.nhl.com/api/v1`;
+            let $overlay, $closeButton
             setOverlayProperties();
             setCloseButtonProperties();
-            //setImageProperties();
             getTeamData();
             getScheduleInfo();
-            //console.log("Image Width: " + settings.imageWidth);
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
             $overlay.append(`<ul id="scoresList"></ul>`)
             $("#scoresList").append(`<div style="margin:5px 5px 20px 5px"><table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-width: 3px 3px 10px 3px; border-style: solid; width:100%"></table></div>`)
             $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4" style="color:${settings.teamName.fontColor}; font-size:${settings.teamName.fontSize}"></th></tr>`);
-            // $overlay.append(`<ul id="scoresList"><div id="score1" class="scores"></div><div id="score2" class="scores"></div>
-            // <div id="score3" class="scores"></div><div id="score4", class="scores"></div><div id="score5", class="scores"></div><ul>`)
-            //let endPeriod = "";
+
 
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
-                //$image.attr("src", imageSource);
-                
-                // if(settings.imageCaption.exist == true){
-                //     let caption = $(this).children("img").attr("alt");
-                //     $imageCaption.text(caption);
-                // }
 
                 if($.isFunction(settings.open)){
                     settings.open.call(this);
@@ -157,8 +148,7 @@
                 let configuration = `/teams/`;
                 let modifier = `/stats`;
                 let teamID = $("#teamSelector").val();
-                //const request = `?api_key=DEMO_KEY&date=${dateStr}`;
-                url = settings.api + configuration + teamID + modifier;
+                url = api + configuration + teamID + modifier;
                 fetch(url)
                     .then(response => response.json())
                     .then(json => displayTeamData(json))
@@ -170,15 +160,8 @@
                 console.log(data);
                 console.log("Team ID from plugin - " + settings.teamID);
                 let stats = data.stats[0].splits[0].stat;
-                // $("#response").append("Team: " + $("#teamSelector option:selected").text());
-                // $("#response").append("</br>Games Played: " + stats.gamesPlayed);
-                // $("#response").append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
                 let selectedTeam = $("#teamSelector option:selected").text();
-                //$("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4">${selectedTeam}</th></tr>`);
                 $("#teamName").text(selectedTeam);
-                //$overlay.append("</br>Games Played: " + stats.gamesPlayed);
-                //$("#overlayTable").append(`<tr><td colspan=4>Games Played: ${stats.gamesPlayed}</td></tr>`)
-                //$overlay.append(". Record: " + stats.wins + "-" + stats.losses + "-" + stats.ot);
                 $("#overlayTable").append(`<tr><td colspan=4 style="color:${settings.record.fontColor}; font-size:${settings.record.fontSize}">Record: ${stats.wins}-${stats.losses}-${stats.ot}</td></tr>`)
                 getStandingsInfo();
             }
@@ -189,7 +172,7 @@
                 let gameType = `R`
                 configuration = `/schedule?teamId=`
                 extension = `&season=${season}&gameType=${gameType}`;
-                url = settings.api + configuration + id + extension;
+                url = api + configuration + id + extension;
                 fetch(url)
                     .then(response => response.json())
                     .then(json => displayScheduleInfo(json, id))
@@ -197,11 +180,10 @@
             }
 
             function getEndOfGamePeriod(date, currentGame){
-                //`https://statsapi.web.nhl.com/api/v1/schedule?teamId=2&startDate=2021-10-30&endDate=2021-10-30&hydrate=team,linescore`
                 let id = $("#teamSelector").val();
                 configuration = `/schedule?teamId=`
                 extension = `&startDate=${date}&endDate=${date}&hydrate=team,linescore`;
-                url = settings.api + configuration + id + extension;
+                url = api + configuration + id + extension;
                 fetch(url)
                     .then(response => response.json())
                     .then(json => displayEndOfGamePeriod(json.dates[0].games[0].linescore.currentPeriodOrdinal, currentGame))
@@ -211,7 +193,7 @@
             function getStandingsInfo(){
                 let id = $("#teamSelector").val();
                 configuration = '/standings/'
-                url = settings.api + configuration;
+                url = api + configuration;
                 fetch(url)
                 .then( response => response.json() )
                 .then( json => displayStandingsInfo(json.records, id) )
@@ -235,19 +217,12 @@
                     }
                 }
                 
-                // for (let team of teams) {
-                //     if (team.id == id) {
-                //         divisionID = team.division.id;
-                //     }
-                // }
                 $("#overlayTable").append(`<tr><td colspan=4 style="color:${settings.rank.fontColor}; font-size:${settings.rank.fontSize}">League Rank: ${leagueStanding} | Conference Rank: ${conferenceStanding} | Division Rank: ${divisionalStanding}</td></tr>`)
             }    
 
             function displayEndOfGamePeriod(endPeriodOfGame, currentGame){
                 console.log("current game: " + currentGame);
                 console.log("endofGamePeriod: " + endPeriodOfGame);
-                // endPeriod = endPeriodOfGame;
-                // console.log("endPeriod: " + endPeriod);
 
                 if(currentGame == 1){
                     if (endPeriodOfGame != "3rd"){
@@ -313,7 +288,6 @@
                 let gameIDs = [];
                 let i = counter;
                 let currentGame = 1;
-                //$overlay.append("</br></br>" + "Last " + numberOfGames + " Games:");
                 while (gamesToCheck > 0) {
                     console.log("i - " + i);
                     console.log("Games to check: " + gamesToCheck);
@@ -352,10 +326,6 @@
                             console.log("Record at beginning: " + record.startingRecord.wins + "-" + record.startingRecord.losses + "-" + record.startingRecord.otl);
                         }
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        //$("#response").append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        //$("#overlayTable").append(`<tr><td colspan="4">${schedule[i]["date"]}</td></tr>`);
-                        //$("#overlayTable").append(`<tr><td>${schedule[i].games[0].teams.away.team.name}</td><td>${schedule[i].games[0].teams.away.score}</td><td>${schedule[i].games[0].teams.home.score}</td><td>${schedule[i].games[0].teams.home.team.name}</td></tr>`);
-                        //$("#overlayTable").append(`<tr><td colspan="4">--------------------------------------------------</td></tr>`);
                         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
                         let gameDate = new Date(schedule[i]["date"]);
                         gameDate.setDate(gameDate.getDate() + 1);
@@ -373,9 +343,6 @@
                         for (let i=0; i < length; i++) {
                             awayImage = awayImage.replace(" ", "_");
                         }
-
-                        // <div class="team1"><img class="awayImage" src="images/${awayImage}.png">${schedule[i].games[0].teams.away.team.name}</div>
-                        //             <div class="team2"><img class="homeImage" src="images/${homeImage}.png">${schedule[i].games[0].teams.home.team.name}</div>
 
                         $("#scoresList").append(
                         `<div class="scoreContainer">
@@ -405,26 +372,6 @@
                                 </div>
                             </div>
                         </div>`)
-                                                        // <div class="score">
-                                //     <div class="score1">${schedule[i].games[0].teams.away.score}</div>
-                                //     <div class="score2">${schedule[i].games[0].teams.home.score}</div>
-                                // </div>
-                                // <div class="gameStatus">
-                                //     <div class="final">F</div>
-                                //     <div id="endPeriodGame${currentGame}"class="endPeriod"></div>
-                                // </div>
-                        // let primaryColor = null;
-                        // let secondaryColor = null;
-                        // console.log("ID: " + id);
-                        // for(let team of teamColors){
-                        //     console.log(team);
-                        //     if (team[0] == id){
-                        //         primaryColor = team[1];
-                        //         secondaryColor = team[2];
-                        //     }
-                        // }
-                        // console.log("Primary Color: " + primaryColor);
-                        // console.log("Secondary Color: " + secondaryColor);
 
                         $(".scoreContainer").css("background", settings.gameResults.primaryColor);
                         $(".scoreContainer").css("border-color", settings.gameResults.secondaryColor);
@@ -432,17 +379,13 @@
                         $("#overlayTable").css("border-color", settings.gameResults.secondaryColor);
                         getEndOfGamePeriod(schedule[i]["date"], currentGame);
                         currentGame++;
-                        //$overlay.append("</br>" + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                        // gameIDs[gameIDs.length] = schedule[i].games[0]["gamePk"];
                         gamesToCheck--;
                         i--;
                     } else {
                         // if a game is in progress on the current date, we would need to go back one game further to get the final game of the requested amount
                         gameInProgress = true;
-                        //console.log("infinite loop");
                         console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score + " (Game in progress)");
                         i--;
-                        //gamesToCheck++;
                     }
                 }
                 let wins = record.endingRecord.wins - record.startingRecord.wins;
@@ -450,33 +393,11 @@
                 let otl = record.endingRecord.otl - record.startingRecord.otl;
                 console.log("Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
                 $overlay.append(`<div style="color:${settings.recordLast5.fontColor}; font-size:${settings.recordLast5.fontSize}; padding-top:10px">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
-                //$("#response").append("</br>" + "Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
             }
 
             function displayError (error){
                 alert(error.message);
             }
-
-            // function setImageProperties() {
-            //     $image = $('<img>');
-            //     $image.css({
-            //         "width": settings.imageWidth,
-            //         "height": settings.imageHeight,
-            //         "border": settings.imageBorder,
-            //         "border-radius": settings.borderRadius
-            //     });
-
-            //     $overlay.append($image);
-
-            //     if(settings.imageCaption.exist == true){
-            //         $imageCaption = $("<p></p>");
-            //         $imageCaption.css( {
-            //             "color": settings.imageCaption.color,
-            //             "font-size": settings.imageCaption.fontSize
-            //         });
-            //         $overlay.append($imageCaption);
-            //     }
-            // }
 
             function setOverlayProperties(){
                 $overlay = $("<div><div>");
@@ -484,15 +405,15 @@
                     "background": settings.overlay,
                     "opacity": "0.1",
                     "position": "relative",
-                    "margin": "auto",
+                    "margin": settings.margin,
                     "top": "0px",
                     "left": "0px",
                     "display": "none",
                     "text-align": "center",
-                    "width": "50%",
+                    "width": settings.width,
                     "height": "50%",
-                    "padding": "5%",
-                    "border-radius": "10px"
+                    "padding": settings.padding,
+                    "border-radius": settings.borderRadius
                 });
                 $("body").append($overlay);
             }
