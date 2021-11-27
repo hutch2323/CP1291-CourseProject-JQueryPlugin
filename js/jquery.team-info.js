@@ -11,8 +11,6 @@
                 witdh: "30px",
                 height: "30px"
             },
-            // imageBorder: "5px solid #ffffff",
-            // borderRadius: "5px"
             teamName: {
                 fontSize: "25px",
                 fontColor: "#FFFFFF"
@@ -47,8 +45,6 @@
             },
             open: null,
             close: null,
-            // api: `https://statsapi.web.nhl.com/api/v1`,
-            //teamID: $("#teamSelector").val(),
         }, options);
 
         function getPrimaryColor() {
