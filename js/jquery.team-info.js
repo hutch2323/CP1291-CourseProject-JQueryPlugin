@@ -1,6 +1,7 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
         let settings = $.extend({
+            // overlay custom options
             overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
             width: "50%",
             borderRadius: "10px",
@@ -11,8 +12,6 @@
                 witdh: "30px",
                 height: "30px"
             },
-            // imageBorder: "5px solid #ffffff",
-            // borderRadius: "5px"
             teamName: {
                 fontSize: "25px",
                 fontColor: "#FFFFFF"
@@ -47,8 +46,6 @@
             },
             open: null,
             close: null,
-            // api: `https://statsapi.web.nhl.com/api/v1`,
-            //teamID: $("#teamSelector").val(),
         }, options);
 
         function getPrimaryColor() {
