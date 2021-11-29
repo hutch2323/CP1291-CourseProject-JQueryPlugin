@@ -1,7 +1,7 @@
-ul{
+/* ul{
     margin: 0;
     padding: 0;
-}
+} */
 
 /* ul li img {
     display: block;
@@ -9,14 +9,14 @@ ul{
     height: 100px
 } */
 
-#scoresList{
+/* #scoresList{
     width: auto;
     display: inline-block;
     justify-content: center;
     margin: 0;
-}
+} */
 
-.scoreContainer{
+/* .scoreContainer{
     padding:5px;
     margin: 0px 5px 20px 5px;
     width: auto;
@@ -27,9 +27,9 @@ ul{
     height: 175px;
     max-height: 150px;
     overflow:hidden;
-}
+} */
 
-.scores{
+/* .scores{
     vertical-align: middle;
     padding: 10px;
     margin: auto;
@@ -37,35 +37,35 @@ ul{
     flex-direction: column;
     height: 80%;
     overflow: hidden;
-}
+} */
 
-.date{
+/* .date{
     display:table;
     float: left;
     margin: auto;   
-}
+} */
 
-.team1, .team2{
+/* .team1, .team2{
     display: table-cell;
     margin: auto;
     vertical-align: middle;
     justify-content: center;
-}
+} */
 
-.teams{
+/* .teams{
     float: left;
     margin: auto;
     height: 100%;
     overflow:hidden;
-    /* max-width:150px;
-    max-height:150px; */
-}
+    max-width:150px;
+    max-height:150px; 
+} */
 
-.score{
+/* .score{
     float: left;
     padding-right: 20px;
     margin: auto;
-}
+} */
 
 #endPeriodGame1, #endPeriodGame2, #endPeriodGame3, #endGamePeriod4, #endGamePeriod5{
     display: none;
@@ -122,6 +122,6 @@ img.homeImage, img.awayImage{
     justify-content: center; */
 }
 
-#overlayTable{
+/* #overlayTable{
     border-radius: 50px 50px 10px 10px
-}
+} */

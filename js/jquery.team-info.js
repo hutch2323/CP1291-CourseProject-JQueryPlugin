@@ -1,17 +1,12 @@
 (function ($) {
     $.fn.teamInfoPopup = function(options){
         let settings = $.extend({
-            // overlay custom options
+            // custom options available for the plugin
             overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
             width: "50%",
             borderRadius: "10px",
             padding: "5%",
             margin: "auto",
-            closeButton: {
-                src: null,
-                witdh: "30px",
-                height: "30px"
-            },
             teamName: {
                 fontSize: "25px",
                 fontColor: "#FFFFFF"
@@ -44,10 +39,11 @@
                 fontSize: "16px",
                 fontColor: "#FFFFFF"
             },
-            open: null,
-            close: null,
+            season: `20212022`,
+            gameType: `R`
         }, options);
 
+        // function that determines the primary color to be used based on the id of the team selected
         function getPrimaryColor() {
             let primaryColor = null;
             let id = $("#teamSelector").val()
@@ -58,11 +54,10 @@
 
                 }
             }
-            console.log("Primary Color: " + primaryColor);
-
             return primaryColor
         }
 
+        // function that determines the secondary color to be used based on the id of the team selected
         function getSecondaryColor() {
             let secondaryColor = null;
             let id = $("#teamSelector").val();
@@ -72,10 +67,10 @@
                     secondaryColor = team[2];
                 }
             }
-            console.log("Secondary Color: " + secondaryColor);
             return secondaryColor
         }
 
+        // function that will retrieve all primary and secondary colors of the NHL teams
         function getColors(){
             return [[24,"#F47A38","#000000"], // Anaheim Ducks
             [53,"#8C2633", "#5F259F"], // Arizona Coyotes
@@ -119,16 +114,14 @@
             let $overlay, $closeButton
             setOverlayProperties();
             setCloseButtonProperties();
-            getTeamData();
-            getScheduleInfo();
+            displayTeamData();
+            displayGameResults();
 
             $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             $overlay.css("color", "white");
-            $overlay.append(`<ul id="scoresList"></ul>`)
-            $("#scoresList").append(`<div style="margin:5px 5px 20px 5px"><table id="overlayTable" style="text-align:center; margin:auto; table-layout:fixed; border-width: 3px 3px 10px 3px; border-style: solid; width:100%"></table></div>`)
-            $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4" style="color:${settings.teamName.fontColor}; font-size:${settings.teamName.fontSize}"></th></tr>`);
+            initializeHeading();
 
-
+            // click event handler for button
             $(this).find("#proceed").on("click", function(event) {
                 event.preventDefault();
 
@@ -139,23 +132,52 @@
                 $overlay.css({opacity: 0.1}).show().animate({opacity:1});
             });
 
+            // reset default css for ul
+            $("ul").css({
+                "margin": "0",
+                "padding": "0"
+            });
 
-            function getTeamData() {
+            // function used to initialze the heading. This section will display the team name, record and ranks
+            function initializeHeading() {
+                $overlay.append(`<ul id="scoresList"></ul>`)
+                $("#scoresList").append(`<div style="margin:5px 5px 20px 5px"><table id="overlayTable"></table></div>`);
+                $("#overlayTable").css({
+                    "border-radius": "50px 50px 10px 10px",
+                    "border-width": "3px 3px 10px 3px",
+                    "text-align": "center",
+                    "margin": "auto",
+                    "table-layout": "fixed",
+                    "border-style": "solid",
+                    "width": "100%"
+                })
+                $("#overlayTable").append(`<tr style="width:100%"><th id="teamName" colspan="4"></th></tr>`);
+                $("#teamName").css({
+                    "color" : settings.teamName.fontColor,
+                    "font-size": settings.teamName.fontSize
+                });
+            }
+
+            // function that makes a json call to retrieve team stats from the NHL API
+            async function getTeamData() {
                 // build URL for API request
                 let configuration = `/teams/`;
                 let modifier = `/stats`;
                 let teamID = $("#teamSelector").val();
                 url = api + configuration + teamID + modifier;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(json => displayTeamData(json))
-                    .catch(e => displayError(e));
+
+                try{
+                    const response = await fetch(url);
+                    const json = await response.json();
+                    return json
+                } catch(e){
+                    displayError(e)
+                }
             }
 
-            function displayTeamData(data){     
-                $("#response").html("");
-                console.log(data);
-                console.log("Team ID from plugin - " + settings.teamID);
+            // function that retrieves and displays the team name and team record
+            async function displayTeamData(){  
+                const data = await getTeamData();
                 let stats = data.stats[0].splits[0].stat;
                 let selectedTeam = $("#teamSelector option:selected").text();
                 $("#teamName").text(selectedTeam);
@@ -163,40 +185,55 @@
                 getStandingsInfo();
             }
 
-            function getScheduleInfo(){
+            // function used to grab and return the schedule info from the NHL API
+            async function getScheduleInfo(){
                 let id = $("#teamSelector").val();
-                let season = `20212022`
-                let gameType = `R`
+                let season = settings.season;
+                let gameType = settings.gameType;
                 configuration = `/schedule?teamId=`
                 extension = `&season=${season}&gameType=${gameType}`;
                 url = api + configuration + id + extension;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(json => displayScheduleInfo(json, id))
-                    .catch(e => displayError(e));
+
+                try{
+                    const response = await fetch(url);
+                    const json = await response.json();
+                    return json
+                } catch(e){
+                    displayError(e)
+                }
             }
 
-            function getEndOfGamePeriod(date, currentGame){
+            // function used to get the end of game status (i.e. 3rd, OT, SO)
+            async function getEndOfGamePeriod(date){
                 let id = $("#teamSelector").val();
-                configuration = `/schedule?teamId=`
+                configuration = `/schedule?teamId=`;
                 extension = `&startDate=${date}&endDate=${date}&hydrate=team,linescore`;
                 url = api + configuration + id + extension;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(json => displayEndOfGamePeriod(json.dates[0].games[0].linescore.currentPeriodOrdinal, currentGame))
-                    .catch(e => displayError(e));
+                try{
+                    const response = await fetch(url);
+                    const json = await response.json();
+                    return json.dates[0].games[0].linescore.currentPeriodOrdinal;
+                } catch(e){
+                    displayError(e)
+                }
             }
 
-            function getStandingsInfo(){
+            // function that will grab the standings information for the selected team
+            async function getStandingsInfo(){
                 let id = $("#teamSelector").val();
                 configuration = '/standings/'
                 url = api + configuration;
-                fetch(url)
-                .then( response => response.json() )
-                .then( json => displayStandingsInfo(json.records, id) )
-                .catch( e => displayError(e) );
+
+                try{
+                    const response = await fetch(url);
+                    const json = await response.json();
+                    displayStandingsInfo(json.records, id)
+                } catch(e){
+                    displayError(e)
+                }
             }
 
+            // function that will take the json information and display the selected team's divisional, conference and league rankings
             function displayStandingsInfo(json, id){
                 let conferenceStanding = null;
                 let divisionalStanding = null;
@@ -208,20 +245,25 @@
                             leagueStanding = json[i].teamRecords[j].leagueRank;
                             conferenceStanding = json[i].teamRecords[j].conferenceRank;
                             divisionalStanding = json[i].teamRecords[j].divisionRank;
+                            // if team is found, break both loops
                             i = json.length;
                             break;
                         }
                     }
                 }
-                
+                // display team rank info
                 $("#overlayTable").append(`<tr><td colspan=4 style="color:${settings.rank.fontColor}; font-size:${settings.rank.fontSize}">League Rank: ${leagueStanding} | Conference Rank: ${conferenceStanding} | Division Rank: ${divisionalStanding}</td></tr>`)
-            }    
-
-            function displayEndOfGamePeriod(endPeriodOfGame, currentGame){
+            }  
+            
+            // function that will display the end of game status (i.e. OT or SO. Note, it will not display 3rd)
+            async function displayEndOfGamePeriod(date, currentGame){
+                const endPeriodOfGame = await getEndOfGamePeriod(date);
                 console.log("current game: " + currentGame);
                 console.log("endofGamePeriod: " + endPeriodOfGame);
 
+                // check to see which of the 5 games is being analyzed
                 if(currentGame == 1){
+                    // if the end period is not "3rd", display the SO or OT
                     if (endPeriodOfGame != "3rd"){
                         $("#endPeriodGame1").css("display", "block");
                         $("#endPeriodGame1").text(endPeriodOfGame);
@@ -249,25 +291,29 @@
                 }
             }
 
-            function displayScheduleInfo(data, id){
-                console.log(data);
-                console.log(data.dates);
-                let schedule = data.dates;
-                let today = new Date();
+            // function used to display the game results for the past 5 games of the selected team
+            async function displayGameResults(){
+                let id = $("#teamSelector").val()
+                const data = await getScheduleInfo();
+                let schedule = data.dates; // store array of dates to schedule
+                let today = new Date(); // assign current date to today
                 let counter = 0;
+                // loop through each date in the schedule array to determine how many days back you need to go to get last 5 game results
                 for (let day of schedule) {
+                    // create date object using current date in loop
                     let dateOfGame = new Date(day["date"]);
                     dateOfGame.setDate(dateOfGame.getDate() + 1); // date conversion is off by one day. Therefore, we need to add an extra day
+                    // if the date of the game is greater than or equal to the current date, stop the loop
                     if (dateOfGame >= today) {
-                        console.log(dateOfGame + " >= " + today);
                         break;
                     }
                     else {
+                        // if less than, increment the counter
                         counter++;
                     }
                 }
-                console.log("Counter before games loop: " + counter);
         
+                // object literal to hold the starting and ending records of the selected team
                 const record = {
                     startingRecord: {
                         wins: 0,
@@ -280,55 +326,50 @@
                         otl: 0
                     }
                 }
-                let numberOfGames = 5;
-                let gamesToCheck = numberOfGames;
-                let gameIDs = [];
-                let i = counter;
-                let currentGame = 1;
+                let numberOfGames = 5; // since the plugin only goes back 5 games, we set this value to 5 (potential to extend later)
+                let gamesToCheck = numberOfGames; // assign the number of games to a loop control variable
+                let i = counter; // create another "counter" that will use the same value of the counter retrieved earlier
+                let currentGame = 1; // start the search at the most recent game (aka game 1)
+                // loop through the schedule while there are still games that need to be checked. This will grab the results of the past 5
+                // and will get the results of each one of those games
                 while (gamesToCheck > 0) {
-                    console.log("i - " + i);
-                    console.log("Games to check: " + gamesToCheck);
-                    console.log("Game " + i + ":" + schedule[i].games[0].status.abstractGameState);
+                    // if the game has been completed
                     if (schedule[i].games[0].status.abstractGameState == "Final") {
+                        // if it is the first game to check (5 = 5), grab the end records for the team
                         if (gamesToCheck == numberOfGames) {
-                            console.log("Last of 5: " + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                            console.log("Team id: " + id + ". Away id: " + schedule[i].games[0].teams.away.team.id + ". Home id: " + schedule[i].games[0].teams.home.team.id);
+                            // if the away team's id in the game is equal to the id of the team selected by the user, grab the info for the away team
                             if (schedule[i].games[0].teams.away.team.id == id) {
-                                console.log("Your team is the away team");
                                 record.endingRecord.wins = schedule[i].games[0].teams.away.leagueRecord.wins;
                                 record.endingRecord.losses = schedule[i].games[0].teams.away.leagueRecord.losses;
                                 record.endingRecord.otl = schedule[i].games[0].teams.away.leagueRecord.ot;
-                            } else {
-                                console.log("Your team is the home team");
+                            } else { // if the home team's id in the game is equal to the id of the team selected by the user, grab the info for the home team
                                 record.endingRecord.wins = schedule[i].games[0].teams.home.leagueRecord.wins;
                                 record.endingRecord.losses = schedule[i].games[0].teams.home.leagueRecord.losses;
                                 record.endingRecord.otl = schedule[i].games[0].teams.home.leagueRecord.ot;
                             }
-                            console.log("Record after 5 Games: " + record.endingRecord.wins + "-" + record.endingRecord.losses + "-" + record.endingRecord.otl);
+                        // if it is the last game to check (the 5th last game played)
                         } else if (gamesToCheck == 1) {
-                            console.log("First of 5: " + schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
-                            console.log("Team id: " + id + ". Away id: " + schedule[i].games[0].teams.away.team.id + ". Home id: " + schedule[i].games[0].teams.home.team.id);
+                            // if the team selected has the same id as the away team, grab the info for the away team
+                            // need to grab record from the game before (the 6th previous game), as without, it will only show record at the end of the game
                             if (schedule[i - 1].games[0].teams.away.team.id == id) {
                                 console.log("Your team is the away team");
                                 record.startingRecord.wins = schedule[i - 1].games[0].teams.away.leagueRecord.wins;
                                 record.startingRecord.losses = schedule[i - 1].games[0].teams.away.leagueRecord.losses;
                                 record.startingRecord.otl = schedule[i - 1].games[0].teams.away.leagueRecord.ot;
-                            } else {
+                            } else { // if team id matches id of home team, grab home team info
                                 console.log("Your team is the home team");
-                                // need to grab record from the game before (the 6th previous game), as without, it will only show record at the end of the game
                                 record.startingRecord.wins = schedule[i - 1].games[0].teams.home.leagueRecord.wins;
                                 record.startingRecord.losses = schedule[i - 1].games[0].teams.home.leagueRecord.losses;
                                 record.startingRecord.otl = schedule[i - 1].games[0].teams.home.leagueRecord.ot;
                             }
-                            console.log("Record at beginning: " + record.startingRecord.wins + "-" + record.startingRecord.losses + "-" + record.startingRecord.otl);
                         }
-                        console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score);
+                        // array to hold month abbreviations
                         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
-                        let gameDate = new Date(schedule[i]["date"]);
-                        gameDate.setDate(gameDate.getDate() + 1);
-                        let month = months[gameDate.getMonth()];
+                        let gameDate = new Date(schedule[i]["date"]); // create date object using the date of the current game
+                        gameDate.setDate(gameDate.getDate() + 1); // add one day to the game date to get correct date
+                        let month = months[gameDate.getMonth()]; // find the corresponding month abbreviation to the game date
 
-
+                        // grab information to load the team logos for the away team and home team for the current game
                         let homeImage = schedule[i].games[0].teams.home.team.name;
                         let awayImage = schedule[i].games[0].teams.away.team.name;
                         
@@ -341,6 +382,8 @@
                             awayImage = awayImage.replace(" ", "_");
                         }
 
+                        // append the information for the current game to the #scoreList container. This will include the team logos, the score, 
+                        // the date and the end of game status.
                         $("#scoresList").append(
                         `<div class="scoreContainer">
                             <div class="scores" id="score${currentGame}">
@@ -370,21 +413,73 @@
                             </div>
                         </div>`)
 
-                        $(".scoreContainer").css("background", settings.gameResults.primaryColor);
-                        $(".scoreContainer").css("border-color", settings.gameResults.secondaryColor);
+                        $("#scoresList").css({
+                            "width": "auto",
+                            "display": "inline-block",
+                            "justify-content": "center",
+                            "margin": "0"
+                        });
+
+                        // set up css attributes to control the background and border-colors using the primary and secondary colors of the selected team
                         $("#overlayTable").css("background", settings.gameResults.primaryColor);
                         $("#overlayTable").css("border-color", settings.gameResults.secondaryColor);
-                        getEndOfGamePeriod(schedule[i]["date"], currentGame);
-                        currentGame++;
-                        gamesToCheck--;
-                        i--;
+                        displayEndOfGamePeriod(schedule[i]["date"], currentGame);
+                        currentGame++; // increment the current game
+                        gamesToCheck--; // decrement the number of games left to check
+                        i--; // decrement i (as you will be going back one less game)
                     } else {
                         // if a game is in progress on the current date, we would need to go back one game further to get the final game of the requested amount
-                        gameInProgress = true;
-                        console.log(schedule[i]["date"] + ": " + schedule[i].games[0].teams.away.team.name + " " + schedule[i].games[0].teams.away.score + " vs " + schedule[i].games[0].teams.home.team.name + " " + schedule[i].games[0].teams.home.score + " (Game in progress)");
+                        // note, since you still need to check the same number of games, gamesToCheck counter will remain as is and will not decrease here.
                         i--;
                     }
                 }
+
+                $(".scoreContainer").css({
+                    "padding": "5px",
+                    "margin": "0px 5px 20px 5px",
+                    "width": "auto",
+                    "border": "3px solid",
+                    "border-radius": "25px",
+                    "display": "flex",
+                    "justify-content": "center",
+                    "height": "175px",
+                    "max-height": "150px",
+                    "overflow": "hidden",
+                    "background": settings.gameResults.primaryColor,
+                    "border-color": settings.gameResults.secondaryColor
+                });
+
+                $(".scores").css({
+                    "vertical-align": "middle",
+                    "padding": "10px",
+                    "margin": "auto",
+                    "display": "flex",
+                    "flex-direction": "column",
+                    "height": "80%",
+                    "overflow": "hidden"
+                });
+
+                $(".date").css({
+                    "display":"table",
+                    "float": "left",
+                    "margin": "auto"   
+                });
+
+                $(".teams").css({
+                    "float": "left",
+                    "margin": "auto",
+                    "height": "100%",
+                    "overflow": "hidden"
+                });
+
+                $(".score").css({
+                    "float": "left",
+                    "padding-right": "20px",
+                    "margin": "auto"
+                });
+
+                
+                // display the selected team's win - loss - OT loss record
                 let wins = record.endingRecord.wins - record.startingRecord.wins;
                 let losses = record.endingRecord.losses - record.startingRecord.losses;
                 let otl = record.endingRecord.otl - record.startingRecord.otl;
@@ -392,6 +487,7 @@
                 $overlay.append(`<div style="color:${settings.recordLast5.fontColor}; font-size:${settings.recordLast5.fontSize}; padding-top:10px">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
             }
 
+            // function that will alert the user of an error if there is an issue with an API request
             function displayError (error){
                 alert(error.message);
             }
@@ -416,27 +512,22 @@
             }
 
             function setCloseButtonProperties(){
+                $closeButton = $('<span>X</span>');
                 let prop = {
                     "color": "white",
                     "cursor": "pointer",
                     "font-size": "20px",
-                    "width": settings.closeButton.width,
-                    "height": settings.closeButton.height,
+                    "width": "30px",
+                    "height": "30px",
                     "position": "absolute",
                     "top": "5px",
                     "right": "5px",
                     "border": "0px",
                     "z-index": "1",
-                    "padding": "10px"
+                    "padding": "10px",
+                    "font-size": "20px",
+                    "text-shadow": "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
                 }
-                
-                if(settings.closeButton.src){
-                    $closeButton = $('<img>');
-                    $closeButton.attr("src", settings.closeButton.src);
-                } else {
-                    $closeButton = $('<span>X</span>');
-                }
-
                 $closeButton.css(prop);
                 $overlay.append($closeButton);
             }
