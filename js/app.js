@@ -31,7 +31,6 @@ const initializeDropDown = async () => {
     // append each team in the list to the select/options drop down, using the team id and the team name
     for (let i = 0; i < json.teams.length; i++) {
         $("#teamSelector").append("<option value='" + json.teams[i].id + "'>" + json.teams[i].name + "</option>")
-        console.log(json.teams[i].id + " - " + json.teams[i].name);
         
         // preload team images for plugin
         let teamName = json.teams[i].name
@@ -46,7 +45,6 @@ const initializeDropDown = async () => {
 }
 
 $("#proceed").click( () =>  {
-    //$("#proceed").off("click");
     $("#proceed").attr("disabled", true);
     $(this).teamInfoPopup({
         margin: "0px",
