@@ -39,8 +39,6 @@
                 fontSize: "16px",
                 fontColor: "#FFFFFF"
             },
-            season: `20212022`,
-            gameType: `R`
         }, options);
 
         // function that determines the primary color to be used based on the id of the team selected
@@ -188,9 +186,9 @@
             // function used to grab and return the schedule info from the NHL API
             async function getScheduleInfo(){
                 let id = $("#teamSelector").val();
-                let season = settings.season;
-                let gameType = settings.gameType;
-                configuration = `/schedule?teamId=`
+                let season = `20212022`;
+                let gameType = `R`;
+                configuration = `/schedule?teamId=`;
                 extension = `&season=${season}&gameType=${gameType}`;
                 url = api + configuration + id + extension;
 
@@ -258,12 +256,10 @@
             // function that will display the end of game status (i.e. OT or SO. Note, it will not display 3rd)
             async function displayEndOfGamePeriod(date, currentGame){
                 const endPeriodOfGame = await getEndOfGamePeriod(date);
-                console.log("current game: " + currentGame);
-                console.log("endofGamePeriod: " + endPeriodOfGame);
 
                 // check to see which of the 5 games is being analyzed
                 if(currentGame == 1){
-                    // if the end period is not "3rd", display the SO or OT
+                    // if the end period is not "3rd", display the SO or OT. Also changes display property to block (set to display none otherwise)
                     if (endPeriodOfGame != "3rd"){
                         $("#endPeriodGame1").css("display", "block");
                         $("#endPeriodGame1").text(endPeriodOfGame);
@@ -352,12 +348,10 @@
                             // if the team selected has the same id as the away team, grab the info for the away team
                             // need to grab record from the game before (the 6th previous game), as without, it will only show record at the end of the game
                             if (schedule[i - 1].games[0].teams.away.team.id == id) {
-                                console.log("Your team is the away team");
                                 record.startingRecord.wins = schedule[i - 1].games[0].teams.away.leagueRecord.wins;
                                 record.startingRecord.losses = schedule[i - 1].games[0].teams.away.leagueRecord.losses;
                                 record.startingRecord.otl = schedule[i - 1].games[0].teams.away.leagueRecord.ot;
                             } else { // if team id matches id of home team, grab home team info
-                                console.log("Your team is the home team");
                                 record.startingRecord.wins = schedule[i - 1].games[0].teams.home.leagueRecord.wins;
                                 record.startingRecord.losses = schedule[i - 1].games[0].teams.home.leagueRecord.losses;
                                 record.startingRecord.otl = schedule[i - 1].games[0].teams.home.leagueRecord.ot;
@@ -387,7 +381,7 @@
                         $("#scoresList").append(
                         `<div class="scoreContainer">
                             <div class="scores" id="score${currentGame}">
-                                <div class="date" style="color:${settings.date.fontColor}; font-size:${settings.date.fontSize}">
+                                <div class="date">
                                     ${month}. ${gameDate.getDate()}
                                 </div>
                                 <div class="teams">
@@ -395,16 +389,16 @@
                                         <tr>
                                             <td><img class="awayImage" src="images/${awayImage}.png"></td>
                                             <td>
-                                                <div class="score" style="color:${settings.score.fontColor}; font-size:${settings.score.fontSize}">${schedule[i].games[0].teams.away.score}</div>
+                                                <div class="score"">${schedule[i].games[0].teams.away.score}</div>
                                             </td>
                                             <td style="color:${settings.status.fontColor}; font-size:${settings.status.fontSize}">
                                                 Final
                                                 <div class="gameStatus">
-                                                    <div id="endPeriodGame${currentGame}"class="endPeriod" style="color:${settings.status.fontColor}; font-size:${settings.status.fontSize}"></div>
+                                                    <div id="endPeriodGame${currentGame}"class="endPeriod" style="display: none; margin: auto"></div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="score" style="color:${settings.score.fontColor}; font-size:${settings.score.fontSize}">${schedule[i].games[0].teams.home.score}</div>
+                                                <div class="score"">${schedule[i].games[0].teams.home.score}</div>
                                             </td>
                                             <td><img class="homeImage" src="images/${homeImage}.png"></td>
                                         </tr>
@@ -413,16 +407,6 @@
                             </div>
                         </div>`)
 
-                        $("#scoresList").css({
-                            "width": "auto",
-                            "display": "inline-block",
-                            "justify-content": "center",
-                            "margin": "0"
-                        });
-
-                        // set up css attributes to control the background and border-colors using the primary and secondary colors of the selected team
-                        $("#overlayTable").css("background", settings.gameResults.primaryColor);
-                        $("#overlayTable").css("border-color", settings.gameResults.secondaryColor);
                         displayEndOfGamePeriod(schedule[i]["date"], currentGame);
                         currentGame++; // increment the current game
                         gamesToCheck--; // decrement the number of games left to check
@@ -433,6 +417,53 @@
                         i--;
                     }
                 }
+                // display the selected team's win - loss - OT loss record
+                let wins = record.endingRecord.wins - record.startingRecord.wins;
+                let losses = record.endingRecord.losses - record.startingRecord.losses;
+                let otl = record.endingRecord.otl - record.startingRecord.otl;
+                $overlay.append(`<div id="lastFive">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
+                setStatsDisplayProperties();            
+            }
+
+            // function that will alert the user of an error if there is an issue with an API request
+            function displayError (error){
+                alert(error.message);
+            }
+
+            // function that sets up the properties of the overlay on which the team info / game stats are placed
+            function setOverlayProperties(){
+                $overlay = $("<div><div>");
+                $overlay.css({
+                    "background": settings.overlay,
+                    "opacity": "0.1",
+                    "position": "relative",
+                    "margin": settings.margin,
+                    "top": "0px",
+                    "left": "0px",
+                    "display": "none",
+                    "text-align": "center",
+                    "width": settings.width,
+                    "height": "50%",
+                    "padding": settings.padding,
+                    "border-radius": settings.borderRadius
+                });
+                $("body").append($overlay);
+            }
+
+            // function used to set up the css properties of all the elements that display team info and game results
+            function setStatsDisplayProperties(){
+                // set up css attributes to control the background and border-colors using the primary and secondary colors of the selected team
+                $("#overlayTable").css({
+                    "background": settings.gameResults.primaryColor,
+                    "border-color": settings.gameResults.secondaryColor
+                });
+                
+                $("#scoresList").css({
+                    "width": "auto",
+                    "display": "inline-block",
+                    "justify-content": "center",
+                    "margin": "0"
+                });
 
                 $(".scoreContainer").css({
                     "padding": "5px",
@@ -462,7 +493,9 @@
                 $(".date").css({
                     "display":"table",
                     "float": "left",
-                    "margin": "auto"   
+                    "margin": "auto", 
+                    "color": settings.date.fontColor,
+                    "font-size": settings.date.fontSize
                 });
 
                 $(".teams").css({
@@ -475,42 +508,66 @@
                 $(".score").css({
                     "float": "left",
                     "padding-right": "20px",
+                    "margin": "auto",
+                    "vertical-align": "middle",
+                    "font-size": settings.score.fontSize,
+                    "color": settings.score.fontColor,
+                    "display": "table",
+                    "table-layout": "fixed",
+                    "width": "100%"
+                });
+
+                $(".homeImage, .awayImage").css({
+                    "max-width": "100%",
+                    "max-height": "95px"
+                });
+
+                $(".gameStatus").css({
+                    "display": "table",
+                    "margin": "auto",
+                    "width": "100%",
+                    "vertical-align": "middle",
+                    "justify-content": "center"
+                })
+
+                $(".gameStatus div").css({
+                    "display": "flex",
+                    "width": "100%"
+                });
+
+                $(".final").css({
                     "margin": "auto"
                 });
 
-                
-                // display the selected team's win - loss - OT loss record
-                let wins = record.endingRecord.wins - record.startingRecord.wins;
-                let losses = record.endingRecord.losses - record.startingRecord.losses;
-                let otl = record.endingRecord.otl - record.startingRecord.otl;
-                console.log("Record over past " + numberOfGames + " games: " + wins + "-" + losses + "-" + otl);
-                $overlay.append(`<div style="color:${settings.recordLast5.fontColor}; font-size:${settings.recordLast5.fontSize}; padding-top:10px">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
-            }
-
-            // function that will alert the user of an error if there is an issue with an API request
-            function displayError (error){
-                alert(error.message);
-            }
-
-            function setOverlayProperties(){
-                $overlay = $("<div><div>");
-                $overlay.css({
-                    "background": settings.overlay,
-                    "opacity": "0.1",
-                    "position": "relative",
-                    "margin": settings.margin,
-                    "top": "0px",
-                    "left": "0px",
-                    "display": "none",
-                    "text-align": "center",
-                    "width": settings.width,
-                    "height": "50%",
-                    "padding": settings.padding,
-                    "border-radius": settings.borderRadius
+                $(".scoreTable").css({
+                    "table-layout": "fixed",
+                    "height": "100%",
+                    "max-height": "112px",
+                    "overflow": "hidden"
                 });
-                $("body").append($overlay);
+
+                $(".scoreTable tr").css({
+                    "display": "table",
+                    "table-layout": "fixed",
+                    "width": "100%",
+                    "height": "100%",
+                    "max-height":"112px",
+                    "overflow": "hidden"
+                });
+
+                $(".endPeriod").css({
+                    "color": settings.status.fontColor, 
+                    "font-size": settings.status.fontSize
+                });
+
+                $("#lastFive").css({
+                    "color": settings.recordLast5.fontColor,
+                    "font-size": settings.recordLast5.fontSize,
+                    "padding-top": "10px"
+                });
             }
 
+            // function that handles the css properties for the close button ("X")
             function setCloseButtonProperties(){
                 $closeButton = $('<span>X</span>');
                 let prop = {
@@ -532,12 +589,11 @@
                 $overlay.append($closeButton);
             }
 
+            // click handler for the close button. This will re-enable the proceed button to allow user to select a different team.
             $closeButton.click(function() {
                 $("#proceed").attr("disabled", false);
-                if($.isFunction(settings.close)){
-                    settings.close.call(this);
-                }
                 $overlay.animate({opacity:0.1}, function() {
+                    // remove the overlay from the screen and return to webpage
                     $overlay.remove();      
                 })
             });
