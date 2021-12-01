@@ -287,6 +287,29 @@
                 }
             }
 
+            // function that will determine the team's record over the past 5 games
+            function getRecordOverLastFive(endRecord, startRecord){
+                // object literal to hold the team record over the past 5 games
+                const recordOverLast5 = {
+                    wins: 0,
+                    losses: 0,
+                    otl: 0,
+                }
+
+                // assign values to object literal using values from API
+                recordOverLast5.wins = endRecord.wins - startRecord.wins;
+                recordOverLast5.losses = endRecord.losses - startRecord.losses;
+                recordOverLast5.otl = endRecord.ot - startRecord.ot;
+
+                // return object literal
+                return recordOverLast5;
+            }
+
+            function displayRecordOverLastFive(recordOverLast5, numberOfGames){
+                // display the selected team's win - loss - OT loss record
+                $overlay.append(`<div id="lastFive">Record over past ${numberOfGames} games: ${recordOverLast5.wins}-${recordOverLast5.losses}-${recordOverLast5.otl}</div>`);
+            }
+
             // function used to display the game results for the past 5 games of the selected team
             async function displayGameResults(){
                 let id = $("#teamSelector").val()
@@ -294,6 +317,7 @@
                 let schedule = data.dates; // store array of dates to schedule
                 let today = new Date(); // assign current date to today
                 let counter = 0;
+                
                 // loop through each date in the schedule array to determine how many days back you need to go to get last 5 game results
                 for (let day of schedule) {
                     // create date object using current date in loop
@@ -308,20 +332,9 @@
                         counter++;
                     }
                 }
-        
-                // object literal to hold the starting and ending records of the selected team
-                const record = {
-                    startingRecord: {
-                        wins: 0,
-                        losses: 0,
-                        otl: 0,
-                    },
-                    endingRecord: {
-                        wins: 0,
-                        losses: 0,
-                        otl: 0
-                    }
-                }
+
+                let endRecord; // will hold json values for the end record (current)
+                let startRecord; // will hold json values for the record at the beginning of the last 5 games (5 games ago)
                 let numberOfGames = 5; // since the plugin only goes back 5 games, we set this value to 5 (potential to extend later)
                 let gamesToCheck = numberOfGames; // assign the number of games to a loop control variable
                 let i = counter; // create another "counter" that will use the same value of the counter retrieved earlier
@@ -335,26 +348,18 @@
                         if (gamesToCheck == numberOfGames) {
                             // if the away team's id in the game is equal to the id of the team selected by the user, grab the info for the away team
                             if (schedule[i].games[0].teams.away.team.id == id) {
-                                record.endingRecord.wins = schedule[i].games[0].teams.away.leagueRecord.wins;
-                                record.endingRecord.losses = schedule[i].games[0].teams.away.leagueRecord.losses;
-                                record.endingRecord.otl = schedule[i].games[0].teams.away.leagueRecord.ot;
+                                endRecord = schedule[i].games[0].teams.away.leagueRecord;
                             } else { // if the home team's id in the game is equal to the id of the team selected by the user, grab the info for the home team
-                                record.endingRecord.wins = schedule[i].games[0].teams.home.leagueRecord.wins;
-                                record.endingRecord.losses = schedule[i].games[0].teams.home.leagueRecord.losses;
-                                record.endingRecord.otl = schedule[i].games[0].teams.home.leagueRecord.ot;
+                                endRecord = schedule[i].games[0].teams.home.leagueRecord;
                             }
                         // if it is the last game to check (the 5th last game played)
                         } else if (gamesToCheck == 1) {
                             // if the team selected has the same id as the away team, grab the info for the away team
                             // need to grab record from the game before (the 6th previous game), as without, it will only show record at the end of the game
                             if (schedule[i - 1].games[0].teams.away.team.id == id) {
-                                record.startingRecord.wins = schedule[i - 1].games[0].teams.away.leagueRecord.wins;
-                                record.startingRecord.losses = schedule[i - 1].games[0].teams.away.leagueRecord.losses;
-                                record.startingRecord.otl = schedule[i - 1].games[0].teams.away.leagueRecord.ot;
+                                startRecord = schedule[i - 1].games[0].teams.away.leagueRecord;
                             } else { // if team id matches id of home team, grab home team info
-                                record.startingRecord.wins = schedule[i - 1].games[0].teams.home.leagueRecord.wins;
-                                record.startingRecord.losses = schedule[i - 1].games[0].teams.home.leagueRecord.losses;
-                                record.startingRecord.otl = schedule[i - 1].games[0].teams.home.leagueRecord.ot;
+                                startRecord = schedule[i - 1].games[0].teams.home.leagueRecord;
                             }
                         }
                         // array to hold month abbreviations
@@ -417,12 +422,9 @@
                         i--;
                     }
                 }
-                // display the selected team's win - loss - OT loss record
-                let wins = record.endingRecord.wins - record.startingRecord.wins;
-                let losses = record.endingRecord.losses - record.startingRecord.losses;
-                let otl = record.endingRecord.otl - record.startingRecord.otl;
-                $overlay.append(`<div id="lastFive">Record over past ${numberOfGames} games: ${wins}-${losses}-${otl}</div>`);
-                setStatsDisplayProperties();            
+                // display the team record over past 5 games. This method will take the team record (retrieved by getRecordOverLastFive()) and numberOfGames as arguements
+                displayRecordOverLastFive(getRecordOverLastFive(endRecord, startRecord), numberOfGames)      
+                setStatsDisplayProperties();     
             }
 
             // function that will alert the user of an error if there is an issue with an API request
