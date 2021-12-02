@@ -12,7 +12,7 @@ CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats
   - If you would like to demo the plugin, you can simply launch the index.html file located in the downloaded zip file. This will make use of the css/style.css file</br>
     and the js/script.js, which are simple files used for demonstration purposes.</br>
   
-##Step 2:
+## Step 2:
 Add the following script tags to your HTML file:
 ```html
 <script src="js/jquery-3.6.0-min.js" type="text/javascript"></script>
