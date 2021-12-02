@@ -44,7 +44,38 @@ $(document).ready( () => {
 This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
 ## Step 4:
-If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which indlude:
+If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which include:
+- Popup Overlay:
+    - overlay (the background color of the overlay)
+    - width (the width of the popup overlay)
+    - borderRadius (the border-radius)
+    - padding (the padding of the popup)
+    - margin (this will control where the popup appears. To keep it centered, keep it auto)
+- Team Name (teamName) 
+   - fontSize (this will control the size of the font of the Team Name)
+   - fontColor (the color of the font)
+- Record (record)
+    - fontSize
+    - fontColor
+- Record (record)
+    - fontSize
+    - fontColor
+- Game Results (gameResults - this will control the color scheme for the popup content)
+    - primaryColor (this will be the background color for the game results as well as the team name header)
+    - secondaryColor (this will be the border color for the game results as well as the team name header)
+- Score (score)
+    - fontSize
+    - fontColor
+- Status (status)
+    - fontSize
+    - fontColor
+- Date (date)
+    - fontSize
+    - fontColor
+- Record Over Last 5 Games (recordLast5)
+    - fontSize
+    - fontColor
+ 
     
 ```js
 $("#proceed").click( () =>  {
