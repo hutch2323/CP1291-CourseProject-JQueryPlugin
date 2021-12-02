@@ -1,5 +1,5 @@
 # CP1291-CourseProject-JQueryPlugin Installation Guide
-<h2>CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats</h2>
+CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats
 
 <h3>Step 1:</h3>
   - Download the files in the git repo https://github.com/hutch2323/CP1291-CourseProject-JQueryPlugin
