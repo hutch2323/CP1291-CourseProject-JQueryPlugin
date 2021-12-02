@@ -41,10 +41,55 @@ $(document).ready( () => {
 
 });
 ```
+This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
 ## Step 4:
-If you would like to customize the popup overlay which contains the team information and scores of the previous 5 games
-This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
+If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which indlude:
+    
+```js
+$("#proceed").click( () =>  {
+    $("#proceed").attr("disabled", true);
+    $(this).teamInfoPopup({
+        margin: "0px",
+        width: "50%",
+        borderRadius: "10px",
+        padding: "5%",
+        margin: "auto",
+    // score:{
+    //     fontSize: "5em",
+    //     fontColor: "#000000"
+    // },
+    // date: {
+    //     fontSize: "10px",
+    //     fontColor: "#ffffff"
+    // },
+    // status:{
+    //     fontSize: "20px",
+    //     fontColor: "#234513"
+    // },
+    // gameResults: {
+    //     primaryColor: "#8C2633",
+    //     secondaryColor: "#5F259F"
+    // },
+    // teamName:{
+    //     fontSize: "25px",
+    //     fontColor: "#ffffff"
+    // },
+    // record:{
+    //     fontSize: "15px",
+    //     fontColor: "#000000"
+    // },
+    // rank:{
+    //     fontSize: "12px",
+    //     fontColor: "#ffffff"
+    // },
+    // recordLast5:{
+    //     fontSize: "16px",
+    //     fontColor: "#FFFFFF"
+    // },
+    }) 
+});
+```
 
 
 
