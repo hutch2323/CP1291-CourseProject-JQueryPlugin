@@ -4,7 +4,7 @@ CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats
 ## Step 1:
   - Download the files in the git repo https://github.com/hutch2323/CP1291-CourseProject-JQueryPlugin</br>
   - Unzip the downloaded folder and add the following files to your existing website:</br>
-      - js/app.js [here](../js/app.js)
+      - [js/app.js](https://github.com/hutch2323/CP1291-CourseProject-JQueryPlugin/blob/main/js/app.js)
       - js/jquery-3.6.0-min.js
       - js/jquery.team-info.js
       - images/ (all images from the images folder)</br>
