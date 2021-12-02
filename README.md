@@ -65,7 +65,7 @@ If you would like to customize the popup overlay, you may do so in js/app.js. As
 - **margin** - this will control where the popup appears. To keep it centered, keep it auto
 
 
-### Team Name (teamName), Record (record), Rank (rank) 
+### Team Name (teamName), Record (record), Rank (rank):
 ![teamNameHeader](https://user-images.githubusercontent.com/59344045/144520471-2420275f-6424-4e18-a907-f90d234c768e.png)
 ```js
     teamName: {
