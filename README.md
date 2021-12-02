@@ -40,4 +40,4 @@ $(document).ready( () => {
 ```
 This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
-[](https://imgur.com/a/plrX92W)
+![alt text](https://imgur.com/a/plrX92W)
