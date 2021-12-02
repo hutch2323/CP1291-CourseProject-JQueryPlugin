@@ -30,4 +30,14 @@ Add the following HTML tags to your HTML file:
 </div>
 ```
 
+## Step 3:
+Inside of your JavaScript file, add the following code:
+```js
+$(document).ready( () => {
+
+    initializeDropDown();
+
+});
+```
+This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
