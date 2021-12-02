@@ -58,11 +58,14 @@ If you would like to customize the popup overlay, you may do so in js/app.js. As
             padding: "5%",
             margin: "auto",
 ```
-- overlay (the background color of the overlay)
-- width (the width of the popup overlay)
-- borderRadius (the border-radius)
-- padding (the padding of the popup)
-- margin (this will control where the popup appears. To keep it centered, keep it auto)
+- **overlay** (the background color of the overlay)
+- **width** (the width of the popup overlay)
+- **borderRadius** (the border-radius)
+- **padding** (the padding of the popup)
+- **margin** (this will control where the popup appears. To keep it centered, keep it auto)
+
+
+
 - Team Name (teamName) 
    - fontSize (this will control the size of the font of the Team Name)
    - fontColor (the color of the font)
