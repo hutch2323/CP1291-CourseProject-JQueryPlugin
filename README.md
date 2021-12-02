@@ -47,13 +47,15 @@ This step is crutial to initializing the <select></select> drop-down list. Note:
 If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which include:
 Popup Overlay:
 ```js
-let settings = $.extend({
-    // custom options available for the plugin
-    overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
-    width: "50%",
-    borderRadius: "10px",
-    padding: "5%",
-    margin: "auto",
+(function ($) {
+    $.fn.teamInfoPopup = function(options){
+        let settings = $.extend({
+            // custom options available for the plugin
+            overlay: 'rgba(0.5, 0.5, 0.5, 0.5)',
+            width: "50%",
+            borderRadius: "10px",
+            padding: "5%",
+            margin: "auto",
 ```
 - overlay (the background color of the overlay)
 - width (the width of the popup overlay)
