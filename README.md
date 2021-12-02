@@ -2,7 +2,7 @@
 CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats
 
 ## Description:
-This plugin was designed as the course project of CP1291: Advanced JavaScript. By implementing this plugin on your website, it will gain the ability to display the team name, record, rank (league, conference, division) and the results from the past 5 games for any given NHL team, as selected using a drop-down list.
+This plugin was designed as the course project of CP1291: Advanced JavaScript. By implementing this plugin on your website, it will gain the ability to display the team name, record, rank (league, conference, division) and the results from the past 5 games played for any given NHL team, as selected using a drop-down list. On the click of a button, an overlay will pop up, containing all the previously mentioned information as well as the team's record over those five games.
 
 ## Step 1:
 - Download the files in the git repo https://github.com/hutch2323/CP1291-CourseProject-JQueryPlugin
