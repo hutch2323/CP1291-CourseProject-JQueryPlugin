@@ -45,7 +45,8 @@ This step is crutial to initializing the <select></select> drop-down list. Note:
 
 ## Step 4:
 If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which include:
-Popup Overlay:
+
+### Popup Overlay:
 ```js
 (function ($) {
     $.fn.teamInfoPopup = function(options){
