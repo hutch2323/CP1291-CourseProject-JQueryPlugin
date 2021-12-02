@@ -40,4 +40,6 @@ $(document).ready( () => {
 ```
 This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
-<img src="https://imgur.com/a/plrX92W">
+[!This is an image]()
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/plrX92W" data-context="false" ><a href="//imgur.com/a/plrX92W"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
