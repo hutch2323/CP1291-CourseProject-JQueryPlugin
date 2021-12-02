@@ -40,4 +40,5 @@ $(document).ready( () => {
 ```
 This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
-[!This is an image](//imgur.com/a/plrX92W)
+![dropDown](https://user-images.githubusercontent.com/59344045/144517115-2f542574-65db-4e44-8d3e-6afa1fcd68b1.png)
+
