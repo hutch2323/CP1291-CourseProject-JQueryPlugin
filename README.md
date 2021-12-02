@@ -14,10 +14,9 @@ CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - Hockey Stats
   
 Step 2:
   - Add the following script tags to your HTML file:
-
-          <script src="js/jquery-3.6.0-min.js" type="text/javascript"></script>
-	  <!-- YOUR JS FILE GOES HERE -->
-          <script src="js/jquery.team-info.js" type="text/javascript"></script>
-          <script src="js/app.js" type="text/javascript"></script>
+<script src="js/jquery-3.6.0-min.js" type="text/javascript"></script>
+<!-- YOUR JS FILE GOES HERE -->
+<script src="js/jquery.team-info.js" type="text/javascript"></script>
+<script src="js/app.js" type="text/javascript"></script>
 
 
