@@ -64,17 +64,25 @@ If you would like to customize the popup overlay, you may do so in js/app.js. As
 - **padding** - the padding of the popup
 - **margin** - this will control where the popup appears. To keep it centered, keep it auto
 
+![teamNameHeader](https://user-images.githubusercontent.com/59344045/144520471-2420275f-6424-4e18-a907-f90d234c768e.png)
 
-
-- Team Name (teamName) 
-   - fontSize (this will control the size of the font of the Team Name)
+### Team Name (teamName), Record (record), Rank rank) 
+   - fontSize (this will control the size of the font of each of the Team Name, Record and Rank)
    - fontColor (the color of the font)
-- Record (record)
-    - fontSize
-    - fontColor
-- Record (record)
-    - fontSize
-    - fontColor
+```js
+    teamName: {
+        fontSize: "25px",
+        fontColor: "#FFFFFF"
+    },
+    record: {
+        fontSize: "16px",
+        fontColor: "#FFFFFF"
+    },
+    rank: {
+        fontSize: "16px",
+        fontColor: "#FFFFFF"
+    },
+```
 - Game Results (gameResults - this will control the color scheme for the popup content)
     - primaryColor (this will be the background color for the game results as well as the team name header)
     - secondaryColor (this will be the border color for the game results as well as the team name header)
@@ -136,6 +144,7 @@ $("#proceed").click( () =>  {
     }) 
 });
 ```
+
 
 
 
