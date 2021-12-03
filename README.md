@@ -85,28 +85,38 @@ The settings will affect the font size and color of the image seen above.
 - fontSize (this will control the size of the font of each of the Team Name, Record and Rank)
 - fontColor (the color of the font)
 
+### Game Results (gameResults)
+![gameResult](https://user-images.githubusercontent.com/59344045/144538216-2eab82fa-4381-4e76-b5c6-518d6657b413.png)
+```js
+    gameResults: {
+        primaryColor: getPrimaryColor(),
+        secondaryColor: getSecondaryColor(),
+    },
+```
+These settings will affect the background color and boarder color of the game results, as well as the team information header seen in the previous step. The primary color serves as the background while the secondary color of the selected team will be used as the boarder color.
+- primaryColor (this will be the background color for the game results as well as the team name header)
+- secondaryColor (this will be the border color for the game results as well as the team name header)
+
+### Score (score), Status (status), Date (date):
+```js
+    score: {
+        fontSize: "4em",
+        fontColor: "#FFFFFF"
+    },
+    status: {
+        fontSize: "16px",
+        fontColor: "#FFFFFF"
+    },
+    date: {
+        fontSize: "16px",
+        fontColor: "#FFFFFF"
+    },
+```
+The settings above will affect the font size and color of score (the actual number score for each team), the status (Final / Final OT / Final S/O), the date (i.e Dec. 1). These elements can be seen in the image shown in the Game Result section.
+- fontSize
+- fontColor
 
 
-
-
-
-
-
-
-
-
-- Game Results (gameResults - this will control the color scheme for the popup content)
-    - primaryColor (this will be the background color for the game results as well as the team name header)
-    - secondaryColor (this will be the border color for the game results as well as the team name header)
-- Score (score)
-    - fontSize
-    - fontColor
-- Status (status)
-    - fontSize
-    - fontColor
-- Date (date)
-    - fontSize
-    - fontColor
 - Record Over Last 5 Games (recordLast5)
     - fontSize
     - fontColor
