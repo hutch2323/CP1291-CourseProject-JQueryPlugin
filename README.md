@@ -125,6 +125,7 @@ The settings will affect the font size and color of the score (the actual number
         fontColor: "#FFFFFF"
     },
 ```
+These settings will control the font size and color of the team's record over the last 5 games. This is located under the last game score in the popup.
 - fontSize
 - fontColor
  
