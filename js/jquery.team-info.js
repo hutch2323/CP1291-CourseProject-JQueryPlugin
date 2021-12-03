@@ -307,7 +307,7 @@
 
             function displayRecordOverLastFive(recordOverLast5, numberOfGames){
                 // display the selected team's win - loss - OT loss record
-                $overlay.append(`<div id="lastFive">Record over past ${numberOfGames} games: ${recordOverLast5.wins}-${recordOverLast5.losses}-${recordOverLast5.otl}</div>`);
+                $overlay.append(`<div id="lastFive">Record over last ${numberOfGames} games: ${recordOverLast5.wins}-${recordOverLast5.losses}-${recordOverLast5.otl}</div>`);
             }
 
             // function used to display the game results for the past 5 games of the selected team
