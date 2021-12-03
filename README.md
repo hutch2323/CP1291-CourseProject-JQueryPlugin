@@ -98,6 +98,7 @@ These settings will affect the background color and boarder color of the game re
 - secondaryColor (this will be the border color for the game results as well as the team name header)
 
 ### Score (score), Status (status), Date (date):
+![gameResultScore](https://user-images.githubusercontent.com/59344045/144539152-7dbfd261-be6e-480b-9076-42bd33266aa5.png)
 ```js
     score: {
         fontSize: "4em",
