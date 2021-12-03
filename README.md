@@ -176,10 +176,61 @@ $("#proceed").click( () =>  {
     }) 
 });
 ```
+** Note: The other function located in js/app.js, initializeDropDown(), is required for initializing the values of the drop-down list on the webpage. If you remove this method or fail to call it in your JavaScript file, the drop-down list will not populate. **
+```js
+const initializeDropDown = async () => {
+    // build URL for API request
+    const api = `https://statsapi.web.nhl.com/api/v1`;
+    let configuration = `/teams/`;
+    let url = api + configuration;
 
+    // function to grab the API request
+    const getJSON = async () => {
+        try{
+            const response = await fetch(url);
+            const json = await response.json();
+            return json
+        } catch(e){
+            alert(e)
+        }
+    }
 
+    // store API JSON response
+    const json = await getJSON();
+    // create an array of teams
+    let teams = json.teams;
+    // order the array to sort teams alphabetically for select options
+    teams.sort(function (a, b) {
+        if (a["name"] > b["name"]) {
+            return 1;
+        } else {
+            return -1;
+        }
+    });
 
+    // append each team in the list to the select/options drop down, using the team id and the team name
+    for (let i = 0; i < json.teams.length; i++) {
+        $("#teamSelector").append("<option value='" + json.teams[i].id + "'>" + json.teams[i].name + "</option>")
+        
+        // preload team images for plugin
+        let teamName = json.teams[i].name
+        let length = teamName.length
+        for (let i=0; i < length; i++) {
+            teamName = teamName.replace(" ", "_");
+        }
+        const image = new Image();
+        image.src = `images/${teamName}.png`;
+    }
+}
+```
+# Using The Plugin
+Now that the plugin has been installed and customized, it's time to learn how to use it.
 
+## Step 1:
+The first step in using the plugin is to select one of 32 NHL teams from the drop-down list that was created when the webpage was loaded.
+![dropDownOnly](https://user-images.githubusercontent.com/59344045/144541716-f70608e7-ccc3-4d9d-a8e0-258a9d1dc0b3.png)
+The first step in using the plugin is to select one of 32 NHL teams from the drop-down list that was created when the webpage was loaded.
 
-![dropDown](https://user-images.githubusercontent.com/59344045/144517115-2f542574-65db-4e44-8d3e-6afa1fcd68b1.png)
+## Step 2:
+
 
