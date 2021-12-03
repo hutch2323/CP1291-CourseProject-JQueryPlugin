@@ -44,7 +44,7 @@ $(document).ready( () => {
 This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
 
 ## Step 4:
-If you would like to customize the popup overlay, you may do so in js/app.js. As seen in the following snippet of code, there are a variety of customizable options, which include:
+If you would like to customize the popup overlay, you may do so in js/app.js. However, before customizing, you should first review the following options:
 
 ### Popup Overlay:
 ```js
@@ -129,7 +129,8 @@ These settings will control the font size and color of the team's record over th
 - fontSize
 - fontColor
  
-    
+## Step 5:
+Now that the options have been explained, we can move into implementing custom options. It is recommended that you use the default settings, as a combination of setting changes could affect the appearance of the popup overlay. Below is the click function for the Proceed button (located in js/app.js), which will also initiate the function contained within the plugin file (js/jquery.team-info.js). As the function is called, a series of customizable options can be passed in, which become settings as the popup overlay generates. In this snippet, each option is commented out, but can be easily accessed by removing the comments.
 ```js
 $("#proceed").click( () =>  {
     $("#proceed").attr("disabled", true);
