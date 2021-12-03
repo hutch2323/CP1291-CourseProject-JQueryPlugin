@@ -240,4 +240,4 @@ Once the button is clicked, the plugin will initiate and a popup overlay will be
 ![popup-demo2](https://user-images.githubusercontent.com/59344045/144542443-87544fc0-66a6-4271-9f0d-d2d9ea988557.png)
 
 # Acknowledgements
-Special thanks to [dword4](https://github.com/dword4) and his documentation of the NHL API at https://github.com/dword4/nhlapi
+Special thanks to [dword4](https://github.com/dword4) and their documentation of the NHL API at https://github.com/dword4/nhlapi
