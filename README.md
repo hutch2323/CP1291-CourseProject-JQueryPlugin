@@ -113,7 +113,7 @@ These settings will affect the background color and boarder color of the game re
         fontColor: "#FFFFFF"
     },
 ```
-The settings above will affect the font size and color of score (the actual number score for each team), the status (Final / Final OT / Final S/O), the date (i.e Dec. 1). These elements can be seen in the image shown in the Game Result section.
+The settings will affect the font size and color of the score (the actual number score for each team), the status (Final / Final OT / Final S/O), the date (i.e Dec. 1). These elements can be seen in the image shown above.
 - fontSize
 - fontColor
 
