@@ -81,6 +81,7 @@ If you would like to customize the popup overlay, you may do so in js/app.js. As
         fontColor: "#FFFFFF"
     },
 ```
+The settings will affect the font size and color of the image seen above.
 - fontSize (this will control the size of the font of each of the Team Name, Record and Rank)
 - fontColor (the color of the font)
 
