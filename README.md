@@ -83,8 +83,8 @@ If you would like to customize the popup overlay, you may do so in js/app.js. Ho
     },
 ```
 The settings will affect the font size and color of the image seen above.
-- fontSize (this will control the size of the font of each of the Team Name, Record and Rank)
-- fontColor (the color of the font)
+- **fontSize** - this will control the size of the font of each of the Team Name, Record and Ran
+- **fontColor** - the color of the font
 
 ### Game Results (gameResults)
 ![gameResult](https://user-images.githubusercontent.com/59344045/144538216-2eab82fa-4381-4e76-b5c6-518d6657b413.png)
@@ -95,8 +95,8 @@ The settings will affect the font size and color of the image seen above.
     },
 ```
 These settings will affect the background color and boarder color of the game results, as well as the team information header seen in the previous step. The primary color serves as the background while the secondary color of the selected team will be used as the boarder color.
-- primaryColor (this will be the background color for the game results as well as the team name header)
-- secondaryColor (this will be the border color for the game results as well as the team name header)
+- **primaryColor** - this will be the background color for the game results as well as the team name header
+- **secondaryColor** - this will be the border color for the game results as well as the team name header
 
 ### Score (score), Status (status), Date (date):
 ![gameResultScore](https://user-images.githubusercontent.com/59344045/144539152-7dbfd261-be6e-480b-9076-42bd33266aa5.png)
@@ -115,8 +115,8 @@ These settings will affect the background color and boarder color of the game re
     },
 ```
 The settings will affect the font size and color of the score (the actual number score for each team), the status (Final / Final OT / Final S/O), the date (i.e Dec. 1). These elements can be seen in the image shown above.
-- fontSize
-- fontColor
+- **fontSize**
+- **fontColor**
 
 ### Record Over Last 5 Games (recordLast5):
 ![recordOverLast5](https://user-images.githubusercontent.com/59344045/144540089-c2bf60d2-69f4-4d32-b0ee-9c9cf0ff1762.png)
@@ -127,8 +127,8 @@ The settings will affect the font size and color of the score (the actual number
     },
 ```
 These settings will control the font size and color of the team's record over the last 5 games. This is located under the last game score in the popup.
-- fontSize
-- fontColor
+- **fontSize**
+- **fontColor**
  
 ## Step 5:
 Now that the options have been explained, we can move into implementing custom options. It is recommended that you use the default settings, as a combination of setting changes could affect the appearance of the popup overlay. Below is the click function for the Proceed button (located in js/app.js), which will also initiate the function contained within the plugin file (js/jquery.team-info.js). As the function is called, a series of customizable options can be passed in, which become settings as the popup overlay generates. In this snippet, each option is commented out, but can be easily accessed by removing the comments.
@@ -176,7 +176,7 @@ $("#proceed").click( () =>  {
     }) 
 });
 ```
-** Note: The other function located in js/app.js, initializeDropDown(), is required for initializing the values of the drop-down list on the webpage. If you remove this method or fail to call it in your JavaScript file, the drop-down list will not populate. **
+**Note: The other function located in js/app.js, initializeDropDown(), is required for initializing the values of the drop-down list on the webpage. If you remove this method or fail to call it in your JavaScript file, the drop-down list will not populate.**
 ```js
 const initializeDropDown = async () => {
     // build URL for API request
@@ -227,15 +227,15 @@ const initializeDropDown = async () => {
 Now that the plugin has been installed and customized, it's time to learn how to use it.
 
 ## Step 1:
-The first step in using the plugin is to select one of 32 NHL teams from the drop-down list that was created when the webpage was loaded.
+The first step in using the plugin is to select one of 32 NHL teams from the drop-down list that was created when the webpage was loaded.<br>
 ![dropDownOnly](https://user-images.githubusercontent.com/59344045/144541716-f70608e7-ccc3-4d9d-a8e0-258a9d1dc0b3.png)
 
 ## Step 2:
-After a team has been selected in Step 1, click the Proceed button.
+After a team has been selected in Step 1, click the Proceed button.<br>
 ![button](https://user-images.githubusercontent.com/59344045/144542256-77937fc3-37d3-4c49-87f5-01a02650e3c1.png)
 
 ## Step 3:
-Once the button is clicked, the plugin will initiate and a popup overlay will be displayed over the current content of the webpage. There is an "X" located in the upper right hand corner that must be clicked in order to close the popup. While the popup is open, another instance of the popup cannot be generated. It must be first closed and then restart the process.
+Once the button is clicked, the plugin will initiate and a popup overlay will be displayed over the current content of the webpage. There is an "X" located in the upper right hand corner of the popup that must be clicked in order to close it. While the popup is open, another instance of the popup cannot be generated. It must be first closed and then restart the process. To prevent such actions, the Proceed button becomes disabled once the popup is launched and will only be re-enabled once it has been closed.<br>
 ![popup-demo1](https://user-images.githubusercontent.com/59344045/144542437-18d908cc-6cbd-437c-a5a4-ee24af03860a.png)
 ![popup-demo2](https://user-images.githubusercontent.com/59344045/144542443-87544fc0-66a6-4271-9f0d-d2d9ea988557.png)
 
