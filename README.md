@@ -2,7 +2,7 @@
 CP1291 (Advanced JavaScript) Course Project - JQuery Plugin - NHL Team Stats
 
 ## Description:
-This plugin was designed as the course project of CP1291: Advanced JavaScript. By implementing this plugin on your website, it will gain the ability to display the team name, record, rank (league, conference, division) and the results from the past 5 games played for any given NHL team, as selected using a drop-down list. On the click of a button, an overlay will pop up, containing all the previously mentioned information as well as the team's record over those five games, using today's date as the reference point. The plugin makes use of the NHL API by requsting team specific information depending on what team is selected by the user. This data is then processed and displayed in a popup, which will display over the current webpage.
+This plugin was designed as the course project of CP1291: Advanced JavaScript. By implementing this plugin on your website, it will gain the ability to display the team name, record, rank (league, conference, division) and the results from the past 5 games played for any given NHL team, as selected using a drop-down list. On the click of a button, an overlay will pop up, containing all the previously mentioned information as well as the team's record over those five games, using today's date as the reference point. The plugin makes use of the NHL API by requesting team specific information depending on what team is selected by the user. This data is then processed and displayed in a popup, which will display over the current webpage.
 
 # Download & Installation
 ## Step 1:
@@ -42,7 +42,7 @@ $(document).ready( () => {
 
 });
 ```
-This step is crutial to initializing the <select></select> drop-down list. Note: If using the /script.js file provided, this step is not necessary.
+This step is crucial to initializing the <select></select> drop-down list. Note: If using the js/script.js file provided, this step is not necessary.
 
 ## Step 4:
 If you would like to customize the popup overlay, you may do so in js/app.js. However, before customizing, you should first review the following options:
@@ -83,7 +83,7 @@ If you would like to customize the popup overlay, you may do so in js/app.js. Ho
     },
 ```
 The settings will affect the font size and color of the image seen above.
-- **fontSize** - this will control the size of the font of each of the Team Name, Record and Ran
+- **fontSize** - this will control the size of the font of each of the Team Name, Record and Rank
 - **fontColor** - the color of the font
 
 ### Game Results (gameResults)
